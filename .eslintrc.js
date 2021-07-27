@@ -1,18 +1,24 @@
+/* eslint-disable */
 module.exports = {
-  'env': {
-    'browser': true,
-    'commonjs': true,
-    'es2021': true
+  env: {
+    browser: true,
+    commonjs: true,
+    es2021: true,
+    webextensions: true,
   },
-  'extends': [
+  parser: '@babel/eslint-parser',
+  plugins: [
+    "@babel"
+  ],
+  extends: [
     'eslint:recommended', 
     'eslint-config-airbnb-base'
   ],
-  'parserOptions': {
-    'ecmaVersion': 12
+  parserOptions: {
+    ecmaVersion: 12
   },
-  'rules': {
-    'indent': [
+  rules: {
+    indent: [
       'error',
       2
     ],
@@ -20,26 +26,29 @@ module.exports = {
       'error',
       'unix'
     ],
-    'quotes': [
+    quotes: [
       'error',
       'single'
     ],
-    'semi': [
+    semi: [
       'error',
       'always'
     ],
     'no-unused-vars': [
       'error', 
-      { 'vars': 'all', 'args': 'none', 'ignoreRestSiblings': false }
+      { vars: 'all', args: 'none', ignoreRestSiblings: false }
     ],
     'no-trailing-spaces': [
       'error', 
-      { 'ignoreComments': true },
+      { ignoreComments: true },
     ],
     'max-len': [
       'error', 
-      { 'ignoreComments': true }
+      { ignoreComments: true }
     ],
-    'prefer-arrow-callback': false,
+    'object-shorthand': ["error", "never"],
+    'prefer-arrow-callback': 'off',
+    'no-underscore-dangle': 'off',
+    ignorePatterns: ['dist/**/*.js'],
   }
 };

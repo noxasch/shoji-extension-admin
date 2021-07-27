@@ -1,3 +1,6 @@
+/* eslint-disable func-names */
+/* eslint-disable no-param-reassign */
+// eslint-disable-next-line object-curly-newline
 const { src, dest, watch, series, parallel } = require('gulp');
 // const sourcemaps = require('gulp-sourcemaps');
 const htmlmin = require('gulp-htmlmin');
@@ -20,15 +23,22 @@ const rollupPlugins = [
   babel({
     babelHelpers: 'bundled',
     exclude: 'node_modules/**',
+    configFile: false
   }),
+  // getBabelInputPlugin({ configFile: false }),
   nodeResolve({
     browser: true, // allow to use
   }),
   production && terser({
+    format: {
+      comments: false,
+    },
     keep_fnames: false,
     mangle: {
+      // properties: true,
       toplevel: true,
-    }
+    },
+
   }),
 ];
 
@@ -44,7 +54,6 @@ const rollupPlugins = [
 //     sourcemap: true
 //   });
 // }
-
 
 /**
  * @typedef {Object} filePath
@@ -62,8 +71,8 @@ async function rollupTask(path) {
   });
   await rollupBuild.write({
     file: path.output,
-    format: 'iife',
-    sourcemap: true
+    format: 'es',
+    sourcemap: true,
   });
 }
 
@@ -79,7 +88,7 @@ async function bundleTask(paths) {
 async function jsTask() {
   await bundleTask([
     // see build.config.js
-    { input: 'src/popup/index.js', output: 'dist/debug/popup.js'},
+    { input: 'src/popup/index.js', output: 'dist/debug/popup.js' },
   ]);
 }
 
@@ -94,11 +103,11 @@ function assetTask() {
 
 function htmlTask() {
   const htmlPath = 'src/**/*.html';
-  const distPath = 'dist';
+  // const distPath = 'dist';
   if (!production) {
-    return src([htmlPath, '!lib/**/*.html'],) // ignore not working
+    return src([htmlPath, '!lib/**/*.html']) // ignore not working
       .pipe(replace('assets', '.'))
-      .pipe(replace('index.js', function(file) {
+      .pipe(replace('index.js', function (file) {
         const dirname = this.file.dirname.split('/').pop();
         return `${dirname}.js`;
       }))
@@ -119,27 +128,28 @@ function htmlTask() {
       file.basename = file.dirname;
       file.dirname = '';
     }))
-    .pipe(htmlmin({ collapseWhitespace: true, removeComments: true, minifyCSS: true }))
+    .pipe(htmlmin({
+      collapseWhitespace: true,
+      removeComments: true,
+      minifyCSS: true,
+    }))
     .pipe(dest('dist/debug'));
 }
 
-
-// function watchTask(cb) {
-//   if (!production) {
-//     watch([
-//       sourceFiles.scssPath,
-//       sourceFiles.htmlPath,
-//       sourceFiles.jsPath
-//     ],
-//       series(
-//         cleanDistFolder,
-//         parallel(licenseTask, mdiTask, fontTask, htmlTask, jsTask),
-//       ));
-//   }
-//   return cb(); // signal completion
-// }
+function watchTask(cb) {
+  if (!production) {
+    watch([
+      'src/**/*',
+    ],
+    series(
+      // cleanDistFolder,
+      parallel(jsTask, htmlTask, assetTask),
+    ));
+  }
+  return cb(); // signal completion
+}
 
 // exports.default = series(cleanDistFolder, parallel(),
 //   watchTask);
 
-exports.default = series(parallel(jsTask, htmlTask, assetTask));
+exports.default = series(parallel(jsTask, htmlTask, assetTask), watchTask);
