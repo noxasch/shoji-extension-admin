@@ -150,13 +150,14 @@ function htmlTask() {
 
 function watchTask(cb) {
   if (!production) {
-    watch([
-      'src/**/*',
-    ],
-    series(
-      // cleanDistFolder,
-      parallel(jsTask, htmlTask, assetTask),
-    ));
+    // watch(['src/**/*.js'],
+    //   series(
+    //     // cleanDistFolder,
+    //     parallel(jsTask, htmlTask, assetTask),
+    //   ));
+    watch(['src/**/*.js'], series(jsTask));
+    watch(['src/**/*.html'], series(htmlTask));
+    watch(['assets/**/*'], series(assetTask));
   }
   return cb(); // signal completion
 }
