@@ -7,14 +7,14 @@ const htmlmin = require('gulp-htmlmin');
 const util = require('gulp-util');
 const rename = require('gulp-rename');
 const replace = require('gulp-replace');
-
-// const fs = require('fs');
+const size = require('gulp-size');
 
 const { rollup } = require('rollup');
 const { babel } = require('@rollup/plugin-babel');
 const { terser } = require('rollup-plugin-terser');
 const { nodeResolve } = require('@rollup/plugin-node-resolve');
 const commonjs = require('@rollup/plugin-commonjs');
+const sizes = require('rollup-plugin-size');
 
 const production = util.env.env === 'prod';
 
@@ -23,7 +23,7 @@ const rollupPlugins = [
   babel({
     babelHelpers: 'bundled',
     exclude: 'node_modules/**',
-    configFile: false
+    configFile: false,
   }),
   // getBabelInputPlugin({ configFile: false }),
   nodeResolve({
@@ -40,6 +40,7 @@ const rollupPlugins = [
     },
 
   }),
+  sizes(),
 ];
 
 // need a task for each files
@@ -74,6 +75,7 @@ async function rollupTask(path) {
     format: 'es',
     sourcemap: true,
   });
+  await rollupBuild.close();
 }
 
 /**
@@ -89,11 +91,15 @@ async function jsTask() {
   await bundleTask([
     // see build.config.js
     { input: 'src/popup/index.js', output: 'dist/debug/popup.js' },
+    { input: 'src/background/index.js', output: 'dist/debug/background.js' },
   ]);
 }
 
 function assetTask() {
   return src('assets/**/*')
+    .pipe(size({
+      showFiles: true,
+    }))
     .pipe(dest('dist/debug'));
 }
 
@@ -115,6 +121,9 @@ function htmlTask() {
         file.basename = file.dirname;
         file.dirname = '';
       }))
+      .pipe(size({
+        showFiles: true,
+      }))
       .pipe(dest('dist/debug'));
   }
   return src(htmlPath)
@@ -132,6 +141,9 @@ function htmlTask() {
       collapseWhitespace: true,
       removeComments: true,
       minifyCSS: true,
+    }))
+    .pipe(size({
+      showFiles: true,
     }))
     .pipe(dest('dist/debug'));
 }
