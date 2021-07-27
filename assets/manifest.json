@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "Shoji X",
-  "description": "Just playing with chrome API",
-  "version": "0.1.0",
+  "name": "Shoji Extension Admin",
+  "description": "Administrate your plugin like a pro",
+  "version": "0.12.0",
   "browser_action": {
     "default_popup": "popup.html"
   },
@@ -11,11 +11,8 @@
     "persistent": false
   },
   "permissions": [
-    "tabs",
-    "activeTab",
     "storage",
     "chrome://favicon/",
-    "unlimitedStorage",
     "management",
     "notifications"
   ],
@@ -27,5 +24,10 @@
       "description": "Reload dev extension"
     }
   },
-  "offline_enabled": true
+  "offline_enabled": true,
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
 }
