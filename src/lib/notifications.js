@@ -10,9 +10,9 @@ const notifications = {
    */
   create: async (title, message) => new Promise((resolve, reject) => {
     chrome.notifications.create('', {
-      iconUrl: 'chrome://favicon/https://developer.chrome.com/',
-      title: title, // 'An extension',
-      message: message, // `${extensionInfo.name} has been ${extensionInfo.enabled ? 'enabled' : 'disabled'}`,
+      iconUrl: 'chrome://favicon/https://developer.chrome.com/', // TODO: use extension icon
+      title: title,
+      message: message,
       type: 'basic',
     }, (notificationId) => {
       if (chrome.runtime.lastError) {
