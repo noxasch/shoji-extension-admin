@@ -65,8 +65,8 @@ class View {
    * @returns 
    */
   static _listItemString(id, name, version, enabled, iconSrc, installType) {
-    return /* html */`<li class="list-item p:12 flex" data-id="${id}">\
-<span class="item-icon">\
+    return /* html */`<li class="list-item p:12 flex" data-id="${id}"\
+tabindex="0"><span class="item-icon">\
   <img src="${iconSrc}" ${enabled ? '' : 'class="grayscale"'}\
 width="32px" height="32px" />\
 </span>\
@@ -78,7 +78,7 @@ width="32px" height="32px" />\
     ? '<span class="pills bg:primary-grey fs:12">dev</span>' : ''}
   </div>\
 </div>\
-<label class="toggle">\
+<label class="toggle" tabindex="0">\
   <input class="toggle-checkbox" type="checkbox" id="${id}" ${enabled
   ? 'checked' : ''}>\
     <div class="toggle-switch"></div>\
