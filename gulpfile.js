@@ -8,6 +8,10 @@ const util = require('gulp-util');
 const rename = require('gulp-rename');
 const replace = require('gulp-replace');
 const size = require('gulp-size');
+const through2 = require('through2');
+const path = require('path');
+const File = require('vinyl');
+const resizeImg = require('resize-img');
 
 const { rollup } = require('rollup');
 const { babel } = require('@rollup/plugin-babel');
@@ -63,15 +67,15 @@ const rollupPlugins = [
  */
 
 /**
- * @param {filePath} path
+ * @param {filePath} fp
  */
-async function rollupTask(path) {
+async function rollupTask(fp) {
   const rollupBuild = await rollup({
-    input: path.input,
+    input: fp.input,
     plugins: rollupPlugins,
   });
   await rollupBuild.write({
-    file: path.output,
+    file: fp.output,
     format: 'es',
     sourcemap: true,
   });
@@ -96,7 +100,7 @@ async function jsTask() {
 }
 
 function assetTask() {
-  return src('assets/**/*')
+  return src(['assets/**/*', '!assets/**/*.png'])
     .pipe(size({
       showFiles: true,
     }))
@@ -107,11 +111,52 @@ function assetTask() {
 //   fs.rmdir('dist', { recursive: true }, cb);
 // }
 
+async function iconTask() {
+  return src('assets/**/*.png')
+    .pipe(through2.obj(async function (file, _, cb) {
+      if (file.isBuffer()) {
+        try {
+          const img16 = await resizeImg(file.contents, {
+            width: 16,
+            height: 16,
+          });
+          const img48 = await resizeImg(file.contents, {
+            width: 48,
+            height: 48,
+          });
+          const img128 = await resizeImg(file.contents, {
+            width: 128,
+            height: 128,
+          });
+          [
+            { iconBuff: img16, name: 'icon16.png' },
+            { iconBuff: img48, name: 'icon48.png' },
+            { iconBuff: img128, name: 'icon128.png' },
+          ].forEach((pair) => {
+            this.push(new File({
+              base: file.base,
+              path: path.join(file.base, pair.name),
+              // eslint-disable-next-line new-cap
+              contents: new Buffer.from(pair.iconBuff),
+            }));
+          });
+        } catch (error) {
+          cb(error);
+        }
+        cb();
+      }
+    }))
+    .pipe(size({
+      showFiles: true,
+    }))
+    .pipe(dest('dist/debug'));
+}
+
 function htmlTask() {
   const htmlPath = 'src/**/*.html';
   // const distPath = 'dist';
   if (!production) {
-    return src([htmlPath, '!lib/**/*.html']) // ignore not working
+    return src([htmlPath, '!src/lib/**/*.html']) // ignore not working
       .pipe(replace('assets', '.'))
       .pipe(replace('index.js', function (file) {
         const dirname = this.file.dirname.split('/').pop();
@@ -165,4 +210,6 @@ function watchTask(cb) {
 // exports.default = series(cleanDistFolder, parallel(),
 //   watchTask);
 
-exports.default = series(parallel(jsTask, htmlTask, assetTask), watchTask);
+exports.default = series(
+  parallel(iconTask, jsTask, htmlTask, assetTask), watchTask,
+);
