@@ -2,7 +2,7 @@
  * 
  * @typedef {Object} management
  */
-export const management = {
+const management = {
   /**
    * Get all extensions and app installed
    * @returns {Promise<chrome.management.ExtensionInfo[]>} extensions
@@ -12,7 +12,7 @@ export const management = {
       if (chrome.runtime.lastError) {
         reject(chrome.runtime.lastError);
         return;
-      };
+      }
       resolve(result);
     });
   }),
@@ -27,7 +27,7 @@ export const management = {
       if (chrome.runtime.lastError) {
         reject(chrome.runtime.lastError);
         return;
-      };
+      }
       resolve(result);
     });
   }),
@@ -43,8 +43,10 @@ export const management = {
       if (chrome.runtime.lastError) {
         reject(chrome.runtime.lastError);
         return;
-      };
+      }
       resolve();
     });
   }),
 };
+
+export default management;
