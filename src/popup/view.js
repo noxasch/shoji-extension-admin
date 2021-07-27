@@ -1,3 +1,6 @@
+import { management, reloadAllDev } from '../lib/management';
+import notifications from '../lib/notifications';
+
 class View {
   constructor() {
     if (new.target === View) {
@@ -9,6 +12,10 @@ class View {
 
   static listBodySelector = '.list-view';
 
+  static reloadBtnId = 'reload';
+
+  static switchSelector = 'input[type="checkbox"]';
+
   /**
    * @param {chrome.management.ExtensionInfo[]} extensions
    * @param {chrome.management.ExtensionInfo[]} devEtensions
@@ -18,8 +25,10 @@ class View {
       if (item.enabled) return res + 1;
       return res;
     }, 0);
-    this.renderInfo(extensions.length, activeCount, devEtensions.length);
-    this.renderList(extensions);
+    View.renderInfo(extensions.length, activeCount, devEtensions.length);
+    View.renderList(extensions);
+    await View.registerReloadEvent();
+    View.registerSwitchEvent();
   }
 
   /**
@@ -57,25 +66,41 @@ class View {
    */
   static _listItemString(id, name, version, enabled, iconSrc, installType) {
     return /* html */`<li class="list-item p:12 flex" data-id="${id}">\
-      <span class="item-icon placeholder">\
-        <img src="${iconSrc}" width="16px" height="16px" />\
-      </span>\
-      <div class="column fg:1">\
-        <span class="title pb:4">${name}</span>\
-        <div class="row">\
-          <span class="subtitle fs:12">${version}</span>\
+<span class="item-icon">\
+  <img src="${iconSrc}" ${enabled ? '' : 'class="grayscale"'}\
+width="32px" height="32px" />\
+</span>\
+<div class="column fg:1">\
+  <span class="title pb:4">${name}</span>\
+  <div class="row">\
+    <span class="subtitle fs:12">${version}</span>\
           ${installType === 'development'
     ? '<span class="pills bg:primary-grey fs:12">dev</span>' : ''}
-        </div>\
-      </div>\
-      <label class="toggle">\
-        <input class="toggle-checkbox" type="checkbox" id="${id}" ${enabled
+  </div>\
+</div>\
+<label class="toggle">\
+  <input class="toggle-checkbox" type="checkbox" id="${id}" ${enabled
   ? 'checked' : ''}>\
-          <div class="toggle-switch"></div>\
-        </label>\
-        <div class="w:10"></div>\
-        <span class="mdi mdi-dots-vertical fs:24 toggle-dropdown"></span>\
-      </li>`;
+    <div class="toggle-switch"></div>\
+  </label>\
+  <div class="w:10"></div>\
+  <span class="mdi mdi-dots-vertical fs:24 toggle-dropdown"></span>\
+</li>`;
+  }
+
+  /**
+   * @param {chrome.management.ExtensionInfo} extensionInfo
+   * @returns {String} iconSrc
+   */
+  static _getMaxResIcon(extensionInfo) {
+    let iconSrc = '';
+    if (extensionInfo.icons !== undefined && extensionInfo.icons) {
+      const temp = extensionInfo.icons.pop();
+      if (temp) {
+        iconSrc = temp.url;
+      }
+    }
+    return iconSrc;
   }
 
   /**
@@ -83,12 +108,9 @@ class View {
    */
   static renderList(extensions = []) {
     const html = extensions.reduce((res, item) => {
-      let iconSrc = '';
-      if (item.icons !== undefined && item.icons) {
-        iconSrc = item.icons[0].url;
-      }
+      const iconSrc = View._getMaxResIcon(item);
       return res
-        + this._listItemString(
+        + View._listItemString(
           item.id,
           item.name,
           item.version,
@@ -98,10 +120,93 @@ class View {
         );
     }, '');
 
-    const listBody = document.querySelector(this.listBodySelector);
+    const listBody = document.querySelector(View.listBodySelector);
     if (listBody) {
-      this.clearElement(listBody);
-      listBody.insertAdjacentHTML('beforeend', `<ul>${html}</ul>`);
+      View.clearElement(listBody);
+      listBody.insertAdjacentHTML('beforeend', html);
+    }
+  }
+
+  static spin() {
+    const reloadBtn = document.getElementById(View.reloadBtnId);
+    if (reloadBtn) {
+      const icon = reloadBtn.querySelector('.mdi');
+      if (icon) {
+        requestAnimationFrame(() => {
+          icon.classList.remove('mdi-reload');
+          icon.classList.add('mdi-loading', 'mdi-spin');
+        });
+      } else {
+        throw TypeError('mdi-reload is undefined');
+      }
+    } else {
+      throw TypeError('Reload button is undefined');
+    }
+  }
+
+  static removeSpin() {
+    const reloadBtn = document.getElementById(View.reloadBtnId);
+    if (reloadBtn) {
+      const icon = reloadBtn.querySelector('.mdi');
+      if (icon) {
+        requestAnimationFrame(() => {
+          icon.classList.remove('mdi-loading', 'mdi-spin');
+          icon.classList.add('mdi-reload');
+        });
+      } else {
+        throw TypeError('mdi-reload is undefined');
+      }
+    } else {
+      throw TypeError('Reload button is undefined');
+    }
+  }
+
+  /**
+   * 
+   * @param {MouseEvent} event 
+   */
+  static async onClickReloadButton(event) {
+    View.spin();
+    await reloadAllDev(null);
+    setTimeout(() => {
+      View.removeSpin();
+      const extName = chrome.runtime.getManifest().name;
+      if (chrome.runtime.lastError) {
+        const { message } = chrome.runtime.lastError;
+        if (message) {
+          notifications.create(extName, message);
+        }
+      } else {
+        notifications.create(extName, 'All dev extension has been reloaded');
+      }
+    }, 2000);
+  }
+
+  static async registerReloadEvent() {
+    const reloadBtn = document.getElementById(View.reloadBtnId);
+    if (reloadBtn) {
+      reloadBtn.addEventListener('click', View.onClickReloadButton);
+    } else {
+      throw TypeError('Reload button is undefined');
+    }
+  }
+
+  /**
+   * @param {Event} event
+   */
+  static async onSwitchChange(event) {
+    const el = event.target;
+    if (el instanceof HTMLInputElement) {
+      await management.setEnabled(el.id, el.checked);
+    }
+  }
+
+  static registerSwitchEvent() {
+    const switches = document.querySelectorAll(View.switchSelector);
+    if (switches) {
+      switches.forEach((sw) => {
+        sw.addEventListener('change', View.onSwitchChange);
+      });
     }
   }
 }
