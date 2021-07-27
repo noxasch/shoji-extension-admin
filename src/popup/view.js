@@ -1,5 +1,4 @@
-import { management, reloadAllDev } from '../lib/management';
-import notifications from '../lib/notifications';
+import { management } from '../lib/management';
 
 class View {
   constructor() {
@@ -27,7 +26,6 @@ class View {
     }, 0);
     View.renderInfo(extensions.length, activeCount, devEtensions.length);
     View.renderList(extensions);
-    await View.registerReloadEvent();
     View.registerSwitchEvent();
   }
 
@@ -124,70 +122,6 @@ width="32px" height="32px" />\
     if (listBody) {
       View.clearElement(listBody);
       listBody.insertAdjacentHTML('beforeend', html);
-    }
-  }
-
-  static spin() {
-    const reloadBtn = document.getElementById(View.reloadBtnId);
-    if (reloadBtn) {
-      const icon = reloadBtn.querySelector('.mdi');
-      if (icon) {
-        requestAnimationFrame(() => {
-          icon.classList.remove('mdi-reload');
-          icon.classList.add('mdi-loading', 'mdi-spin');
-        });
-      } else {
-        throw TypeError('mdi-reload is undefined');
-      }
-    } else {
-      throw TypeError('Reload button is undefined');
-    }
-  }
-
-  static removeSpin() {
-    const reloadBtn = document.getElementById(View.reloadBtnId);
-    if (reloadBtn) {
-      const icon = reloadBtn.querySelector('.mdi');
-      if (icon) {
-        requestAnimationFrame(() => {
-          icon.classList.remove('mdi-loading', 'mdi-spin');
-          icon.classList.add('mdi-reload');
-        });
-      } else {
-        throw TypeError('mdi-reload is undefined');
-      }
-    } else {
-      throw TypeError('Reload button is undefined');
-    }
-  }
-
-  /**
-   * 
-   * @param {MouseEvent} event 
-   */
-  static async onClickReloadButton(event) {
-    View.spin();
-    await reloadAllDev(null);
-    setTimeout(() => {
-      View.removeSpin();
-      const extName = chrome.runtime.getManifest().name;
-      if (chrome.runtime.lastError) {
-        const { message } = chrome.runtime.lastError;
-        if (message) {
-          notifications.create(extName, message);
-        }
-      } else {
-        notifications.create(extName, 'All dev extension has been reloaded');
-      }
-    }, 2000);
-  }
-
-  static async registerReloadEvent() {
-    const reloadBtn = document.getElementById(View.reloadBtnId);
-    if (reloadBtn) {
-      reloadBtn.addEventListener('click', View.onClickReloadButton);
-    } else {
-      throw TypeError('Reload button is undefined');
     }
   }
 
