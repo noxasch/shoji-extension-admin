@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shoji Extension - Popup</title>
+  <link rel="stylesheet" href="assets/shoji.min.css">
+  <link rel="stylesheet" href="assets/mdi/materialdesignicons.min.css">
+</head>
+<body class="w:450">
+  <div class="header bb:1 p:12">
+    <div class="input-group">
+      <input class="form-control" type="search" name="search" id="search" placeholder="Search Extensions">
+      <label for="search"></label>
+    </div>
+    <div id="reload" class="button bg:primary ripple fs:16" tabindex="0">
+      reload dev <span class="i:box w:10"></span><span class="mdi mdi-reload"></span>
+    </div>
+  </div>
+  <div class="info-bar bb:1 fs:12 p:12">
+    You have a total of <span class="bold">49</span> extensions. <span class="bold">17</span> enabled extension. <span
+      class="bold">4</span> dev extension.
+  </div>
+  <div class="content oy:scroll">
+    <ul class="list-view"></ul>
+  </div>
+  <div class="footer p:12 fs:12 flex">
+    <span class="left">Shoji Extension Admin v1.5.2</span>
+    <span class="right">Reload keyboard shortcut: <span><kbd>⌥</kbd>+<kbd>R</kbd></span></span>
+  </div>
+  <script src="index.js"></script>
+</body>
+</html>
