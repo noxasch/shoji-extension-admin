@@ -17,6 +17,7 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 12
   },
+  ignorePatterns: ['./dist/**/*.js'],
   rules: {
     indent: [
       'error',
@@ -49,6 +50,5 @@ module.exports = {
     'object-shorthand': ["error", "never"],
     'prefer-arrow-callback': 'off',
     'no-underscore-dangle': 'off',
-    ignorePatterns: ['dist/**/*.js'],
   }
 };
