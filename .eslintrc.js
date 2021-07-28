@@ -5,6 +5,7 @@ module.exports = {
     commonjs: true,
     es2021: true,
     webextensions: true,
+    jest: true,
   },
   parser: '@babel/eslint-parser',
   plugins: [
