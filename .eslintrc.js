@@ -53,6 +53,6 @@ module.exports = {
     'no-underscore-dangle': 'off',
     'import/no-extraneous-dependencies': [
       'error', 
-      { 'devDependencies': ["gulpfile.js/**/*.js"] }]
+      { 'devDependencies': ["gulpfile.js/**/*.js", "tests/**/*.js"] }]
   }
 };
