@@ -6,7 +6,7 @@
   "scripts": {
     "build": "NODE_ENV=production gulp",
     "dev": "gulp",
-    "test": "jest --runInBand --coverage"
+    "test": "jest --runInBand && nyc report --reporter=html"
   },
   "keywords": [],
   "author": "",
