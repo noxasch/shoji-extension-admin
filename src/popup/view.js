@@ -39,9 +39,11 @@ class View {
     const info = document.querySelector(View.infoBarSelector);
     if (info) {
       info.innerHTML = `You have a total of <span class="bold">\
-        ${extensionCount}</span> extensions.\
-        <span class="bold">${activeCount}</span> enabled extension. <span\
-        class="bold">${devCount}</span> dev extension.`;
+${extensionCount}</span> extensions.\
+ <span class="bold">${activeCount}</span> enabled extension.\
+ <span class="bold">${devCount}</span> dev extension.`.replace(/\s+/g, ' ');
+    } else {
+      throw ReferenceError(`${View.infoBarSelector} is undefined`);
     }
   }
 
