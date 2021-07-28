@@ -44,5 +44,6 @@ function watchTask(cb) {
 //   watchTask);
 
 exports.default = series(
-  parallel(iconTask, jsTask, htmlTask, manifestTask, assetTask), watchTask,
+  parallel(iconTask, jsTask, htmlTask, manifestTask, assetTask),
+  watchTask,
 );
