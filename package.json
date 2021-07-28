@@ -6,7 +6,7 @@
   "scripts": {
     "build": "NODE_ENV=production gulp",
     "dev": "gulp",
-    "test": "jest"
+    "test": "jest --runInBand --coverage"
   },
   "keywords": [],
   "author": "",
@@ -35,8 +35,10 @@
     "gulp-sourcemaps": "^3.0.0",
     "jest": "^27.0.6",
     "jest-cli": "^27.0.6",
+    "jest-puppeteer": "^5.0.4",
     "jsdom": "^16.6.0",
     "node-forge": "^0.10.0",
+    "puppeteer-to-istanbul": "^1.4.0",
     "resize-img": "^1.1.2",
     "rollup": "^2.54.0",
     "rollup-plugin-size": "^0.2.2",
