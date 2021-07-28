@@ -1,5 +1,5 @@
 import { reloadAllDev } from '../lib/management';
-import notifications from '../lib/notifications';
+import { createNotification } from '../lib/notifications';
 
 class ViewReloadButton {
   // constructor() {
@@ -59,15 +59,16 @@ class ViewReloadButton {
       await reloadAllDev(null);
       setTimeout(() => {
         ViewReloadButton.removeSpin();
-        const extName = chrome.runtime.getManifest().name;
-        if (chrome.runtime.lastError) {
-          const { message } = chrome.runtime.lastError;
-          if (message) {
-            notifications.create(extName, message);
-          }
-        } else {
-          notifications.create(extName, 'All dev extension has been reloaded');
-        }
+        createNotification();
+        // const extName = chrome.runtime.getManifest().name;
+        // if (chrome.runtime.lastError) {
+        //   const { message } = chrome.runtime.lastError;
+        //   if (message) {
+        //     notifications.create(extName, message);
+        //   }
+        // } else {
+        //   notifications.create(extName, 'All dev extension has been reloaded');
+        // }
       }, 2000);
     }
   }

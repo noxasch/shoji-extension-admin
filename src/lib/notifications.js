@@ -1,7 +1,7 @@
 /**
  * @typedef {Object} notification
  */
-const notifications = {
+export const notifications = {
   /**
    * 
    * @param {String} title 
@@ -25,4 +25,14 @@ const notifications = {
   }),
 };
 
-export default notifications;
+export function createNotification() {
+  const extName = chrome.runtime.getManifest().name;
+  if (chrome.runtime.lastError) {
+    const { message } = chrome.runtime.lastError;
+    if (message) {
+      notifications.create(extName, message);
+    }
+  } else {
+    notifications.create(extName, 'All dev extension has been reloaded');
+  }
+}
