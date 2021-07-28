@@ -117,3 +117,5 @@ out
 .pnp.*
 
 dist
+# mac
+.DS_STORE

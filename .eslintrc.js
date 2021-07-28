@@ -50,5 +50,8 @@ module.exports = {
     'object-shorthand': ["error", "never"],
     'prefer-arrow-callback': 'off',
     'no-underscore-dangle': 'off',
+    'import/no-extraneous-dependencies': [
+      'error', 
+      { 'devDependencies': ["gulpfile.js/**/*.js"] }]
   }
 };
