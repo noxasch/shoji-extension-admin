@@ -3,7 +3,7 @@
 // eslint-disable-next-line object-curly-newline
 const { src, dest, watch, series, parallel } = require('gulp');
 // const sourcemaps = require('gulp-sourcemaps');
-const util = require('gulp-util');
+require('dotenv').config(); // include .env to process.env
 const size = require('gulp-size');
 
 const jsTask = require('./bundle.task');
@@ -11,7 +11,7 @@ const iconTask = require('./icon.task');
 const manifestTask = require('./manifest.task');
 const htmlTask = require('./html.task');
 
-const production = util.env.env === 'prod';
+const production = process.env.NODE_ENV === 'production';
 
 function assetTask() {
   return src([

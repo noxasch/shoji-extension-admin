@@ -1,5 +1,3 @@
-const util = require('gulp-util');
-
 const { rollup } = require('rollup');
 const { babel } = require('@rollup/plugin-babel');
 const { terser } = require('rollup-plugin-terser');
@@ -7,7 +5,7 @@ const { nodeResolve } = require('@rollup/plugin-node-resolve');
 const commonjs = require('@rollup/plugin-commonjs');
 const sizes = require('rollup-plugin-size');
 
-const production = util.env.env === 'prod';
+const production = process.env.NODE_ENV === 'production';
 
 // TODO: validate manifest file a valid json
 // TODO: validate permission in manifest file

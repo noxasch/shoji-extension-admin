@@ -4,10 +4,9 @@ const { src, dest } = require('gulp');
 const htmlmin = require('gulp-htmlmin');
 const rename = require('gulp-rename');
 const replace = require('gulp-replace');
-const util = require('gulp-util');
 const size = require('gulp-size');
 
-const production = util.env.env === 'prod';
+const production = process.env.NODE_ENV === 'production';
 
 function htmlTask() {
   const htmlPath = 'src/**/*.html';

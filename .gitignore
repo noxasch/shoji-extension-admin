@@ -119,3 +119,4 @@ out
 dist
 # mac
 .DS_STORE
+*.pem

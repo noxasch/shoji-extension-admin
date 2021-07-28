@@ -1,13 +1,12 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable func-names */
 const { src, dest } = require('gulp');
-const util = require('gulp-util');
 const through2 = require('through2');
 const forge = require('node-forge');
 const fs = require('fs');
 const path = require('path');
 
-const production = util.env.env === 'prod';
+const production = process.env.NODE_ENV === 'production';
 
 function manifestTask() {
   return src(['assets/manifest.json'])
