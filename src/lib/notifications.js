@@ -9,8 +9,9 @@ const notifications = {
    * @returns {Promise<String>} notificationId
    */
   create: async (title, message) => new Promise((resolve, reject) => {
+    const iconUrl = chrome.runtime.getURL('icon48.png');
     chrome.notifications.create('', {
-      iconUrl: 'chrome://favicon/https://developer.chrome.com/', // TODO: use extension icon
+      iconUrl: iconUrl,
       title: title,
       message: message,
       type: 'basic',
