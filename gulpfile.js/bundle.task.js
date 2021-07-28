@@ -9,6 +9,22 @@ const sizes = require('rollup-plugin-size');
 
 const production = util.env.env === 'prod';
 
+// TODO: validate manifest file a valid json
+// TODO: validate permission in manifest file
+
+// need a task for each files
+// async function rollupTask() {
+//   const rollupBuild = await rollup({
+//     input: 'src/popup/index.js',
+//     plugins: rollupPlugins,
+//   });
+//   await rollupBuild.write({
+//     file: 'dist/debug/popup.js',
+//     format: 'iife',
+//     sourcemap: true
+//   });
+// }
+
 const rollupPlugins = [
   commonjs(),
   babel({
