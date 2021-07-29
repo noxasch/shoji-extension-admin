@@ -1,4 +1,5 @@
 import { management } from '../lib/management';
+import utils from '../lib/utilities';
 
 class View {
   constructor() {
@@ -89,16 +90,41 @@ width="32px" height="32px" />\
   }
 
   /**
+   * 
+   * @param {String} name 
+   * @returns {String} image URL in base64
+   */
+  static _generateBase64Img(name) {
+    const firstLetter = name[0];
+    const canvas = document.createElement('canvas');
+    canvas.width = 48;
+    canvas.height = 48;
+    // const ctx = /** @type {CanvasRenderingContext2D} */ canvas.getContext('2d');
+    const ctx = utils.assertNonNull(canvas.getContext('2d'));
+    ctx.fillStyle = '#6B6B6B';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '32px sans-serif';
+    const textSize = ctx.measureText(firstLetter);
+    ctx.fillText(firstLetter, (canvas.width / 2) - (textSize.width / 2), 35);
+    return canvas.toDataURL(); // png is the default base64 format
+  }
+
+  /**
    * @param {chrome.management.ExtensionInfo} extensionInfo
    * @returns {String} iconSrc
    */
   static _getMaxResIcon(extensionInfo) {
     let iconSrc = '';
-    if (extensionInfo.icons !== undefined && extensionInfo.icons) {
-      const temp = extensionInfo.icons.pop();
+    if (extensionInfo.icons !== undefined && extensionInfo.icons.length > 0) {
+      const icons = extensionInfo.icons.length > 3
+        ? extensionInfo.icons.slice(0, 2) : extensionInfo.icons;
+      const temp = icons.pop();
       if (temp) {
         iconSrc = temp.url;
       }
+    } else {
+      iconSrc = View._generateBase64Img(extensionInfo.name);
     }
     return iconSrc;
   }
