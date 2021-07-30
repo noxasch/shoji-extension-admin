@@ -2,7 +2,7 @@ require('dotenv').config();
 const pti = require('puppeteer-to-istanbul');
 const ViewReloadButton = require('../src/popup/viewReloadButton');
 
-// require('expect-puppeteer'); // for custon puppeteer setup
+// require('expect-puppeteer'); // for custom puppeteer setup
 
 const extensionID = process.env.EXTENSION_ID;
 
