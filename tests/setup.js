@@ -4,6 +4,10 @@ import { JSDOM } from 'jsdom';
 // const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>');
 // console.log(dom.window.document.querySelector('p').textContent); // "Hello world"
 
+// TODO: setup to run gulp to rebuild for each integration test
+// SO we can simulate other test cases
+// eg: use different HTML index
+
 const DEFAULT_HTML = '<html><body></body></html>';
 
 function setupTestEnvironment() {
