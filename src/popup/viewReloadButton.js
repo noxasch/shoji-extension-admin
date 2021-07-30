@@ -73,7 +73,7 @@ class ViewReloadButton {
     }
   }
 
-  static async registerReloadEvent() {
+  static registerReloadEvent() {
     const reloadBtn = document.getElementById(ViewReloadButton.reloadBtnId);
     if (reloadBtn) {
       reloadBtn.addEventListener('click', ViewReloadButton.onClickReloadButton);
