@@ -1,4 +1,4 @@
-const { src, dest } = require('gulp');
+const { src, dest, lastRun } = require('gulp');
 const size = require('gulp-size');
 
 const production = process.env.NODE_ENV === 'production';
@@ -9,7 +9,8 @@ function assetTask() {
     '!assets/**/*.png',
     '!assets/manifest.json', // manifest is handled by the manifestTask()
     ...(production ? ['!assets/*.pem'] : []), // exclude debug key on production
-  ])
+  ],
+  { since: lastRun(assetTask) })
     .pipe(size({
       showFiles: true,
     }))

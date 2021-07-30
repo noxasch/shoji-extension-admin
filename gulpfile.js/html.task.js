@@ -1,6 +1,6 @@
 /* eslint-disable func-names */
 /* eslint-disable no-param-reassign */
-const { src, dest } = require('gulp');
+const { src, dest, lastRun } = require('gulp');
 const htmlmin = require('gulp-htmlmin');
 const rename = require('gulp-rename');
 const replace = require('gulp-replace');
@@ -26,7 +26,7 @@ function htmlTask() {
       }))
       .pipe(dest('dist/debug'));
   }
-  return src(htmlPath)
+  return src(htmlPath, { since: lastRun(htmlPath) })
     // .pipe(replace('style.css', buildName.css))
     .pipe(replace('assets/', ''))
     .pipe(replace('index.js', function (file) {
