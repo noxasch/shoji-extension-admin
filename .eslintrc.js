@@ -52,7 +52,10 @@ module.exports = {
     ],
     'max-len': [
       'error', 
-      { ignoreComments: true }
+      { 
+        code: 90,
+        ignoreComments: true 
+      }
     ],
     'object-shorthand': ["error", "never"],
     'prefer-arrow-callback': 'off',
