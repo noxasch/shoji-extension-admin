@@ -1,3 +1,6 @@
+/**
+ * @jest-environment puppeteer
+ */
 require('dotenv').config();
 const pti = require('puppeteer-to-istanbul');
 const ViewReloadButton = require('../src/popup/viewReloadButton');
