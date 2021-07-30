@@ -1,30 +1,17 @@
 /* eslint-disable func-names */
 /* eslint-disable no-param-reassign */
 // eslint-disable-next-line object-curly-newline
-const { src, dest, watch, series, parallel } = require('gulp');
-// const sourcemaps = require('gulp-sourcemaps');
-require('dotenv').config(); // include .env to process.env
-const size = require('gulp-size');
+const { watch, series, parallel } = require('gulp');
+// const sourcemaps = require('gulp-sourcemaps'); // gulp has built in sourcemaps
+require('dotenv').config(); // include .env to process.env before load any task
 
 const jsTask = require('./bundle.task');
 const iconTask = require('./icon.task');
 const manifestTask = require('./manifest.task');
 const htmlTask = require('./html.task');
+const assetTask = require('./assets.task');
 
 const production = process.env.NODE_ENV === 'production';
-
-function assetTask() {
-  return src([
-    'assets/**/*',
-    '!assets/**/*.png',
-    '!assets/manifest.json', // manifest is handled by the manifestTask()
-    ...(production ? ['!assets/*.pem'] : []), // exclude debug key on production
-  ])
-    .pipe(size({
-      showFiles: true,
-    }))
-    .pipe(dest('dist/debug'));
-}
 
 function watchTask(cb) {
   if (!production) {
@@ -36,6 +23,7 @@ function watchTask(cb) {
     watch(['src/**/*.js'], series(jsTask));
     watch(['src/**/*.html'], series(htmlTask));
     watch(['assets/**/*'], series(assetTask));
+    watch(['assets/manifest.json'], series(manifestTask));
   }
   return cb(); // signal completion
 }
