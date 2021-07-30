@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 // const { src, dest } = require('gulp');
 // const rename = require('gulp-rename');
+// // npm i -D gulp-best-rollup or from local ../../gulp-best-rollup
 // const rollup = require('gulp-best-rollup');
 // const size = require('gulp-size');
 

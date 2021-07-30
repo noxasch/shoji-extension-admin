@@ -5,6 +5,7 @@ module.exports = (api) => {
       plugins: [
         '@babel/plugin-transform-modules-commonjs',
       ],
+      sourceMaps: true,
     };
   }
 
@@ -15,5 +16,6 @@ module.exports = (api) => {
     plugins: [
       '@babel/plugin-syntax-class-properties',
     ],
+    sourceMaps: true,
   };
 };

@@ -3,9 +3,8 @@ module.exports = {
   modulePathIgnorePatterns: ['cypress'],
   preset: 'jest-puppeteer',
   // setupFilesAfterEnv: ['./jest.setup.js'],
-  // collectCoverage: true,
-  coverageReporters: ['json', 'text', 'lcov'],
   collectCoverage: true,
+  setupFilesAfterEnv: ['./jest.setup.js'],
   // setupFiles: ['./tests/setup.js'],
   // testEnvironmentOptions: {
   // },
