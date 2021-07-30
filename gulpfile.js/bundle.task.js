@@ -1,3 +1,9 @@
+/* eslint-disable no-param-reassign */
+// const { src, dest } = require('gulp');
+// const rename = require('gulp-rename');
+// const rollup = require('gulp-best-rollup');
+// const size = require('gulp-size');
+
 const { rollup } = require('rollup');
 const { babel } = require('@rollup/plugin-babel');
 const { terser } = require('rollup-plugin-terser');
@@ -78,6 +84,27 @@ async function bundleTask(paths) {
     await rollupTask(p);
   });
 }
+
+// uses gulp-best-rollup
+// function expTask() {
+//   return src(['src/**/index.js'])
+//     .pipe(rollup({
+//       // There is no `input` option as rollup integrates into the gulp pipeline
+//       plugins: rollupPlugins,
+//     }, {
+//       // Rollups `sourcemap` option is unsupported. Use `gulp-sourcemaps` plugin instead
+//       format: 'es',
+//     }))
+//     .pipe(rename((file) => {
+//       console.log(file);
+//       file.basename = file.dirname;
+//       file.dirname = '';
+//     }))
+//     .pipe(size({
+//       showFiles: true,
+//     }))
+//     .pipe(dest('dist/debug'));
+// }
 
 async function jsTask() {
   await bundleTask([
