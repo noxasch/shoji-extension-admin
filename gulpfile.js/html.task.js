@@ -11,7 +11,7 @@ const production = process.env.NODE_ENV === 'production';
 function htmlTask() {
   const htmlPath = 'src/**/*.html';
   if (!production) {
-    return src([htmlPath, '!src/lib/**/*.html'])
+    return src([htmlPath, '!src/lib/**/*.html'], { since: lastRun(htmlTask) })
       .pipe(replace('assets', '.'))
       .pipe(replace('index.js', function (file) {
         const dirname = this.file.dirname.split('/').pop();
@@ -26,7 +26,7 @@ function htmlTask() {
       }))
       .pipe(dest('dist/debug'));
   }
-  return src(htmlPath, { since: lastRun(htmlPath) })
+  return src([htmlPath, '!src/lib/**/*.html'])
     // .pipe(replace('style.css', buildName.css))
     .pipe(replace('assets/', ''))
     .pipe(replace('index.js', function (file) {

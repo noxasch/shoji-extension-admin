@@ -25,13 +25,13 @@ function watchTask(cb) {
     watch(['assets/**/*'], series(assetTask));
     watch(['assets/manifest.json'], series(manifestTask));
   }
-  return cb(); // signal completion
+  return cb(null); // signal completion
 }
 
 // exports.default = series(cleanDistFolder, parallel(),
 //   watchTask);
 
 exports.default = series(
-  parallel(iconTask, jsTask, htmlTask, manifestTask, assetTask),
+  parallel(iconTask, htmlTask, manifestTask, assetTask, jsTask),
   watchTask,
 );
