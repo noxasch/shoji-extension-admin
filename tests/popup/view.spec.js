@@ -121,7 +121,7 @@ describe('Basic UI Test', () => {
 
   test('onSwitchChange shoud not called setEnabled', () => {
     jest.spyOn(management, 'setEnabled');
-    View.onSwitchChange();
+    View.onSwitchChange({});
     expect(management.setEnabled).not.toBeCalled();
   });
 

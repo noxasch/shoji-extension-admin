@@ -89,17 +89,24 @@ describe('', () => {
     await expect(page.$('.mdi-reload')).resolves.toBeTruthy();
   }, 20000);
 
-  test('test popup', async () => {
+  test('Popup should contain 1 list item', async () => {
     const listItem = await page
       .$$('.list-item');
     expect(listItem).toBeTruthy();
     expect(listItem.length).toBe(1);
-    // await page.click(`#${ViewReloadButton.default.reloadBtnId}`);
-    const spinner = await page.$('.mdi-loading');
-    // // expect(spinner).toBeTruthy();
-    await delay(5000);
+    const spinner = await page.$('.mdi-loading.mdi-spin');
     expect(spinner).toBeFalsy();
   }, 10000);
+
+  test('Clicking the button', async () => {
+    expect(page.$(`#${ViewReloadButton.default.reloadBtnId}`)).resolves.toBeTruthy();
+    expect(page.$('.mdi-reload')).resolves.toBeTruthy();
+    await page.click(`#${ViewReloadButton.default.reloadBtnId}`);
+    await delay(200); // wait 200ms for the animation to start
+    expect(page.$('.mdi-loading.mdi-spin')).resolves.toBeTruthy();
+    await delay(2000); // wait another 2sec
+    expect(page.$('.mdi-loading.mdi-spin')).resolves.toBeFalsy();
+  });
 
   test('test background page', async () => {
     const targets = await browser.targets();
@@ -108,6 +115,8 @@ describe('', () => {
     );
     const backgroundPage = await backgroundPageTarget.page();
     expect(backgroundPage).toBeTruthy();
+    // background page exist but these keys does not seems to work
+    // in puppeteer
     await page.keyboard.down('Alt');
     await page.keyboard.press('R');
     await page.keyboard.up('Alt');
