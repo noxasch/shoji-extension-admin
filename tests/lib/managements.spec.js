@@ -1,4 +1,4 @@
-import { management } from '../../src/lib/management';
+import management from '../../src/lib/management';
 import extensionsInfo from '../fixtures/extensionsList';
 
 describe('managements test', () => {
@@ -94,25 +94,25 @@ describe('managements test', () => {
     expect(management.setEnabled('1234', true)).rejects.toEqual(lastErrorMessage);
   });
 
-  // test('reload', async () => {
-  //   jest.spyOn(management, 'setEnabled');
-  //   management.setEnabled.mockImplementation((extId, enabled, cb) => null);
-  //   await management.reload();
-  //   expect(management.setEnabled).toBeCalledTimes(2);
-  // });
+  test('reload', async () => {
+    jest.spyOn(management, 'setEnabled');
+    management.setEnabled.mockImplementation((extId, enabled, cb) => null);
+    await management.reload();
+    expect(management.setEnabled).toBeCalledTimes(2);
+  });
 
-  // test('filterDevExtension', async () => {
-  //   expect(management.filterDevExtension(extensionsInfo)).toEqual([extensionsInfo[0]]);
-  // });
+  test('filterDevExtension', async () => {
+    expect(management.filterDevExtension(extensionsInfo)).toEqual([extensionsInfo[0]]);
+  });
 
-  // test('reloadAllDev should not call manangement.getAll', async () => {
-  //   jest.spyOn(management, 'getAll');
-  //   jest.spyOn(management, 'filterDevExtension');
-  //   jest.spyOn(management, 'reload');
-  //   management.reload.mockImplementation(() => null);
-  //   chrome.runtime.id = '123';
-  //   await management.reloadAllDev(extensionsInfo);
-  //   expect(management.getAll).not.toBeCalled();
-  //   expect(management.reload).toBeCalledTimes(1);
-  // });
+  test('reloadAllDev should not call manangement.getAll', async () => {
+    jest.spyOn(management, 'getAll');
+    jest.spyOn(management, 'filterDevExtension');
+    jest.spyOn(management, 'reload');
+    management.reload.mockImplementation(() => null);
+    chrome.runtime.id = '123';
+    await management.reloadAllDev(extensionsInfo);
+    expect(management.getAll).not.toBeCalled();
+    expect(management.reload).toBeCalledTimes(1);
+  });
 });

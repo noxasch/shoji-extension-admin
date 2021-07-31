@@ -5,7 +5,7 @@
 import userEvent from '@testing-library/user-event';
 import popupHtml from '../fixtures/popup';
 import extensions from '../fixtures/extensionsList';
-import { management } from '../../src/lib/management';
+import management from '../../src/lib/management';
 import View from '../../src/popup/view';
 
 describe('Basic UI Test', () => {

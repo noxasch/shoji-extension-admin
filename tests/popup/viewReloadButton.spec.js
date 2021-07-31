@@ -5,11 +5,12 @@
 import userEvent from '@testing-library/user-event';
 import ViewReloadButton from '../../src/popup/viewReloadButton';
 import popupHtml from '../fixtures/popup';
-import { reloadAllDev } from '../../src/lib/management';
-import { createNotification } from '../../src/lib/notifications';
+import management from '../../src/lib/management';
+import notifications from '../../src/lib/notifications';
 
-jest.mock('../../src/lib/management');
-jest.mock('../../src/lib/notifications');
+// mock all inside a module
+// jest.mock('../../src/lib/management');
+// jest.mock('../../src/lib/notifications');
 
 describe('ViewReloadButton', () => {
   beforeEach(() => {
@@ -86,28 +87,41 @@ describe('ViewReloadButton', () => {
 
   test('Should call onClickReloadButton', async () => {
     jest.spyOn(ViewReloadButton, 'onClickReloadButton');
-    jest.spyOn(ViewReloadButton, 'spin');
-    jest.spyOn(ViewReloadButton, 'removeSpin');
-    reloadAllDev.mockImplementation(() => Promise.resolve());
-    createNotification.mockImplementation(() => null);
-    // jest.spyOn(window, 'setTimeOut');
     // jest.spyOn(ViewReloadButton, 'spin');
+    // jest.spyOn(ViewReloadButton, 'removeSpin');
+    // jest.spyOn(management, 'reloadAllDev');
+    ViewReloadButton.onClickReloadButton.mockImplementation(() => Promise.resolve());
     document.body.innerHTML = popupHtml;
     ViewReloadButton.registerReloadEvent();
     expect(ViewReloadButton.reloading).toBeFalsy();
     // jest.useFakeTimers();
     userEvent.click(document.getElementById(ViewReloadButton.reloadBtnId));
     expect(ViewReloadButton.onClickReloadButton).toBeCalled();
+  });
+
+  test('onClickReloadButton', async () => {
+    jest.spyOn(ViewReloadButton, 'spin');
+    jest.spyOn(ViewReloadButton, 'removeSpin');
+    jest.spyOn(management, 'reloadAllDev');
+    jest.spyOn(management, 'getAll');
+    jest.spyOn(notifications, 'createNotification');
+    ViewReloadButton.spin.mockImplementation(() => null);
+    ViewReloadButton.removeSpin.mockImplementation(() => null);
+    management.reloadAllDev.mockImplementation(() => Promise.resolve());
+    management.getAll.mockImplementation(() => Promise.resolve());
+    notifications.createNotification.mockImplementation(() => Promise.resolve());
+
+    await ViewReloadButton.onClickReloadButton({ target: null });
+
     expect(ViewReloadButton.spin).toBeCalled();
-    // expect(() => reloadAllDev).resolves.toBeCalled();
-    await reloadAllDev();
-    // expect(reloadAllDev).toBeCalled();
+    expect(management.getAll).toBeCalled();
+    expect(management.reloadAllDev).toBeCalled();
     expect(setTimeout).toBeCalled();
     expect(setTimeout).toHaveBeenCalledTimes(1);
     expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 2000);
     jest.runAllTimers();
     expect(ViewReloadButton.removeSpin).toBeCalled();
-    expect(createNotification).toBeCalled();
+    expect(notifications.createNotification).toBeCalled();
   });
 
   test('init Should call registerReloadEvent', () => {

@@ -1,4 +1,4 @@
-import { notifications, createNotification } from '../../src/lib/notifications';
+import notifications from '../../src/lib/notifications';
 
 describe('Notifications', () => {
   afterEach(() => {
@@ -43,7 +43,7 @@ describe('Notifications', () => {
     chrome.runtime.getManifest.mockImplementation(() => manifest);
     expect(chrome.runtime.getManifest()).toEqual(manifest);
     expect(chrome.runtime.getManifest).toBeCalled();
-    await createNotification();
+    await notifications.createNotification();
     expect(notifications.create).toBeCalled();
   });
 });
