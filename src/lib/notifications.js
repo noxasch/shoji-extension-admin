@@ -17,22 +17,14 @@ export const notifications = {
       type: 'basic',
     }, (notificationId) => {
       if (chrome.runtime.lastError) {
-        reject(chrome.runtime.lastError);
-        return;
+        return reject(chrome.runtime.lastError.message);
       }
-      resolve(notificationId);
+      return resolve(notificationId);
     });
   }),
 };
 
-export function createNotification() {
+export async function createNotification() {
   const extName = chrome.runtime.getManifest().name;
-  if (chrome.runtime.lastError) {
-    const { message } = chrome.runtime.lastError;
-    if (message) {
-      notifications.create(extName, message);
-    }
-  } else {
-    notifications.create(extName, 'All dev extension has been reloaded');
-  }
+  await notifications.create(extName, 'All dev extension has been reloaded');
 }
