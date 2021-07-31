@@ -1,11 +1,12 @@
-import { reloadAllDev } from '../lib/management';
-import { createNotification } from '../lib/notifications';
+import management from '../lib/management';
+import notifications from '../lib/notifications';
 
 function registerCommand() {
   chrome.commands.onCommand.addListener(async (command) => {
     if (command === 'Alt+R') {
-      await reloadAllDev(null);
-      createNotification();
+      const extensions = await management.getAll();
+      await management.reloadAllDev(extensions);
+      notifications.createNotification();
     }
   });
 }

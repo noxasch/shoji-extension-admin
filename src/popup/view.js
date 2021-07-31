@@ -1,4 +1,4 @@
-import { management } from '../lib/management';
+import management from '../lib/management';
 import utils from '../lib/utilities';
 
 class View {

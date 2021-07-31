@@ -1,7 +1,7 @@
 /**
  * @typedef {Object} notification
  */
-export const notifications = {
+const notifications = {
   /**
    * 
    * @param {String} title 
@@ -22,9 +22,11 @@ export const notifications = {
       return resolve(notificationId);
     });
   }),
+
+  createNotification: async () => {
+    const extName = chrome.runtime.getManifest().name;
+    await notifications.create(extName, 'All dev extension has been reloaded');
+  },
 };
 
-export async function createNotification() {
-  const extName = chrome.runtime.getManifest().name;
-  await notifications.create(extName, 'All dev extension has been reloaded');
-}
+export default notifications;
