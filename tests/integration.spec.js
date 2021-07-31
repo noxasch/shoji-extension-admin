@@ -1,7 +1,8 @@
 /**
  * @jest-environment puppeteer
  */
-require('dotenv').config();
+// also count as e2e test since we run with actual chrome API
+require('dotenv').config(); // include extension pem and
 const pti = require('puppeteer-to-istanbul');
 const ViewReloadButton = require('../src/popup/viewReloadButton');
 
