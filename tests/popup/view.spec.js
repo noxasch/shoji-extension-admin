@@ -124,4 +124,9 @@ describe('Basic UI Test', () => {
     View.onSwitchChange();
     expect(management.setEnabled).not.toBeCalled();
   });
+
+  test('should return 2', () => {
+    const count = View.getActiveExtensionCount(extensions);
+    expect(count).toBe(2);
+  });
 });

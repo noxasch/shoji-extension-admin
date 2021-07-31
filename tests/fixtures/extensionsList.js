@@ -1,9 +1,11 @@
 const extensions = [
   {
     name: 'extension 0',
+    enabled: true,
   },
   {
     name: 'extension 1',
+    enabled: true,
     icons: [
       { url: 'chrome://extension-icon/1/16/0' },
       { url: 'chrome://extension-icon/2/48/0' },

@@ -17,14 +17,23 @@ class View {
   static switchSelector = 'input[type="checkbox"]';
 
   /**
+   * 
+   * @param {chrome.management.ExtensionInfo[]} extensions extensions
+   * @returns {number}
+   */
+  static getActiveExtensionCount(extensions) {
+    return extensions.reduce((res, item) => {
+      if (item.enabled) return res + 1;
+      return res;
+    }, 0);
+  }
+
+  /**
    * @param {chrome.management.ExtensionInfo[]} extensions
    * @param {chrome.management.ExtensionInfo[]} devEtensions
    */
   static async init(extensions, devEtensions) {
-    const activeCount = extensions.reduce((res, item) => {
-      if (item.enabled) return res + 1;
-      return res;
-    }, 0);
+    const activeCount = View.getActiveExtensionCount(extensions);
     View.renderInfo(extensions.length, activeCount, devEtensions.length);
     View.renderList(extensions);
     View.registerSwitchEvent();
