@@ -1,9 +1,12 @@
 const extensions = [
   {
+    id: '1',
+    installType: 'development',
     name: 'extension 0',
     enabled: true,
   },
   {
+    id: '1234',
     name: 'extension 1',
     enabled: true,
     icons: [
@@ -13,6 +16,7 @@ const extensions = [
     ],
   },
   {
+    id: '2',
     name: 'extension 2',
     icons: [
       { url: 'chrome://extension-icon/1/16/0' },
@@ -21,6 +25,7 @@ const extensions = [
     ],
   },
   {
+    id: '3',
     name: 'extension 3',
     icons: [
       { url: 'chrome://extension-icon/1/16/0' },
