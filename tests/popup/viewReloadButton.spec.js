@@ -28,6 +28,7 @@ describe('ViewReloadButton', () => {
     console.error.mockRestore();
     // jest.useRealTimers();
     jest.clearAllTimers(); // avoid infinite loop
+    jest.clearAllMocks();
   });
 
   test('Should throw an error', () => {
@@ -88,7 +89,7 @@ describe('ViewReloadButton', () => {
     jest.spyOn(ViewReloadButton, 'spin');
     jest.spyOn(ViewReloadButton, 'removeSpin');
     reloadAllDev.mockImplementation(() => Promise.resolve());
-    createNotification.mockRestore(() => null);
+    createNotification.mockImplementation(() => null);
     // jest.spyOn(window, 'setTimeOut');
     // jest.spyOn(ViewReloadButton, 'spin');
     document.body.innerHTML = popupHtml;
@@ -109,7 +110,7 @@ describe('ViewReloadButton', () => {
     expect(createNotification).toBeCalled();
   });
 
-  test('Should call init', () => {
+  test('init Should call registerReloadEvent', () => {
     jest.spyOn(ViewReloadButton, 'registerReloadEvent');
     document.body.innerHTML = popupHtml;
     ViewReloadButton.init();
