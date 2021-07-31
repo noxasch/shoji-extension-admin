@@ -3,4 +3,5 @@ module.exports = {
   preset: 'jest-puppeteer',
   collectCoverage: true,
   setupFilesAfterEnv: ['./jest.setup.js'],
+  restoreMocks: true, // restore mock on each test without polluting test file
 };
