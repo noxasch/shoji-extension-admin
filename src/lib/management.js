@@ -10,10 +10,9 @@ export const management = {
   getAll: async () => new Promise((resolve, reject) => {
     chrome.management.getAll((result) => {
       if (chrome.runtime.lastError) {
-        reject(chrome.runtime.lastError);
-        return;
+        return reject(chrome.runtime.lastError.message);
       }
-      resolve(result);
+      return resolve(result);
     });
   }),
 
@@ -25,10 +24,9 @@ export const management = {
   get: async (extensionId) => new Promise((resolve, reject) => {
     chrome.management.get(extensionId, (result) => {
       if (chrome.runtime.lastError) {
-        reject(chrome.runtime.lastError);
-        return;
+        return reject(chrome.runtime.lastError.message);
       }
-      resolve(result);
+      return resolve(result);
     });
   }),
 
@@ -39,10 +37,9 @@ export const management = {
   getSelf: async () => new Promise((resolve, reject) => {
     chrome.management.getSelf((result) => {
       if (chrome.runtime.lastError) {
-        reject(chrome.runtime.lastError);
-        return;
+        return reject(chrome.runtime.lastError.message);
       }
-      resolve(result);
+      return resolve(result);
     });
   }),
 
@@ -55,10 +52,9 @@ export const management = {
   setEnabled: async (id, enabled) => new Promise((resolve, reject) => {
     chrome.management.setEnabled(id, enabled, () => {
       if (chrome.runtime.lastError) {
-        reject(chrome.runtime.lastError);
-        return;
+        return reject(chrome.runtime.lastError.message);
       }
-      resolve();
+      return resolve();
     });
   }),
 };
