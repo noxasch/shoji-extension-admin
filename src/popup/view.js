@@ -44,7 +44,7 @@ ${extensionCount}</span> extensions.\
  <span class="bold">${activeCount}</span> enabled extension.\
  <span class="bold">${devCount}</span> dev extension.`.replace(/\s+/g, ' ');
     } else {
-      throw ReferenceError(`${View.infoBarSelector} is undefined`);
+      throw TypeError(`${View.infoBarSelector} is undefined`);
     }
   }
 
@@ -118,7 +118,7 @@ width="32px" height="32px" />\
     let iconSrc = '';
     if (extensionInfo.icons !== undefined && extensionInfo.icons.length > 0) {
       const icons = extensionInfo.icons.length > 3
-        ? extensionInfo.icons.slice(0, 2) : extensionInfo.icons;
+        ? extensionInfo.icons.slice(0, 2) : [...extensionInfo.icons];
       const temp = icons.pop();
       if (temp) {
         iconSrc = temp.url;
