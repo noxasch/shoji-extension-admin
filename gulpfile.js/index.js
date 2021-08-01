@@ -1,9 +1,10 @@
 /* eslint-disable func-names */
 /* eslint-disable no-param-reassign */
 // eslint-disable-next-line object-curly-newline
+const fs = require('fs');
 const { watch, series, parallel } = require('gulp');
 // const sourcemaps = require('gulp-sourcemaps'); // gulp has built in sourcemaps
-require('dotenv').config(); // include .env to process.env before load any task
+require('dotenv').config(); // load .env to process.env before load any task
 
 const jsTask = require('./bundle.task');
 const iconTask = require('./icon.task');
@@ -13,6 +14,10 @@ const assetTask = require('./assets.task');
 
 const production = process.env.NODE_ENV === 'production';
 const test = process.env.NODE_ENV === 'test';
+
+function cleanDebugFolder(cb) {
+  fs.rmdir('dist/debug', { recursive: true }, cb);
+}
 
 function watchTask(cb) {
   if (!production && !test) {
@@ -29,10 +34,15 @@ function watchTask(cb) {
   return cb(null); // signal completion
 }
 
-// exports.default = series(cleanDistFolder, parallel(),
-//   watchTask);
-
-exports.default = series(
+const seriesTasks = [
+  ...(production ? [cleanDebugFolder] : []),
+  ...(test ? [cleanDebugFolder] : []),
   parallel(iconTask, htmlTask, manifestTask, assetTask, jsTask),
   watchTask,
-);
+];
+
+// exports.default = series(cleanDistFolder, parallel(),
+//   watchTask);
+// series and parallel accept either each task as params or list
+// but not mixed
+exports.default = series(seriesTasks);

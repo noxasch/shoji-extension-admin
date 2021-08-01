@@ -120,3 +120,6 @@ dist
 # mac
 .DS_STORE
 *.pem
+
+# just demo tsc can generate types from jsdoc for library
+types
