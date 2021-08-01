@@ -111,15 +111,32 @@ describe('Basic UI Test', () => {
     expect(View.onSwitchChange).toBeCalled();
   });
 
-  test('onSwitchChange shoud called setEnabled', () => {
+  test('onSwitchChange should called setEnabled', async () => {
     jest.spyOn(management, 'setEnabled');
+    management.setEnabled.mockImplementation(() => Promise.resolve());
     const el = document.createElement('input');
     const ev = { target: el };
-    View.onSwitchChange(ev);
+    await View.onSwitchChange(ev);
     expect(management.setEnabled).toBeCalled();
   });
 
-  test('onSwitchChange shoud not called setEnabled', () => {
+  test('onSwitchChange should toggle grayscale', async () => {
+    const extInfo = [...[extensions[2]]];
+    jest.spyOn(management, 'setEnabled');
+    management.setEnabled.mockImplementation(() => Promise.resolve());
+    document.body.innerHTML = popupHtml;
+    expect(document.querySelector('.grayscale')).toBeFalsy();
+    View.renderList(extInfo);
+    const listItem = document.querySelectorAll('.list-item');
+    expect(listItem.length).toBe(1);
+    expect(document.querySelectorAll('.grayscale').length).toBe(1);
+    const el = listItem[0].querySelector(View.switchSelector);
+    const ev = { target: el };
+    await View.onSwitchChange(ev);
+    expect(document.querySelector('.grayscale')).toBeFalsy();
+  });
+
+  test('onSwitchChange should not called setEnabled', () => {
     jest.spyOn(management, 'setEnabled');
     View.onSwitchChange({});
     expect(management.setEnabled).not.toBeCalled();

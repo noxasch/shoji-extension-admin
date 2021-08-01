@@ -169,6 +169,10 @@ width="32px" height="32px" />\
     const el = event.target;
     if (el instanceof HTMLInputElement) {
       await management.setEnabled(el.id, el.checked);
+      const img = document.querySelector(`li[data-id="${el.id}"] img`);
+      if (img instanceof HTMLImageElement) {
+        img.classList.toggle('grayscale');
+      }
     }
   }
 

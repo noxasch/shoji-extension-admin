@@ -18,6 +18,7 @@ const extensions = [
   {
     id: '2',
     name: 'extension 2',
+    enabled: false,
     icons: [
       { url: 'chrome://extension-icon/1/16/0' },
       { url: 'chrome://extension-icon/2/48/0' },
