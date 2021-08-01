@@ -12,9 +12,10 @@ const htmlTask = require('./html.task');
 const assetTask = require('./assets.task');
 
 const production = process.env.NODE_ENV === 'production';
+const test = process.env.NODE_ENV === 'test';
 
 function watchTask(cb) {
-  if (!production) {
+  if (!production && !test) {
     // watch(['src/**/*.js'],
     //   series(
     //     // cleanDistFolder,
