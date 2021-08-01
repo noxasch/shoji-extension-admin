@@ -6,10 +6,11 @@
   "scripts": {
     "build": "NODE_ENV=production gulp",
     "dev": "gulp",
+    "lint": "eslint src/**/*.js tests/**/*.js",
     "test:unit": "jest --coverage --runInBand",
-    "test:integration": "jest --coverage --runInBand && nyc report --reporter=html",
+    "test:integration": "NODE_ENV=test gulp && jest --coverage --runInBand && nyc report --reporter=html",
     "test:integrationold": "jest --coverage --runInBand -c jest.integration.config.js && nyc report --reporter=html",
-    "test": "npm run test:unit && npm run test:integration && nyc report --reporter=html",
+    "test": "npm run test:unit && npm run test:integration",
     "test:watch": "jest --coverage --runInBand --watch --testPathIgnorePatterns integration.spec.js"
   },
   "keywords": [],
