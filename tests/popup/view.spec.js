@@ -51,7 +51,7 @@ describe('Basic UI Test', () => {
     expect(res).toBe(expectedOutput);
   });
 
-  test('should be a valid base64 png', () => {
+  test('should be a valid base64 with png format', () => {
     // eslint-disable-next-line max-len
     const validBase64 = '^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$';
     const output = View._generateBase64Img('String');

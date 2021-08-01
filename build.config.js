@@ -1,6 +1,7 @@
 /*
 Compare manifest with this and folder structure
 main - open in tab style which is not explicitly declare in manifest
+! NOT IN USE YET - THIS IS A PROPOSAL
 */
 export default {
   script: {
