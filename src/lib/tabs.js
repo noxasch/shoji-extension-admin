@@ -39,7 +39,7 @@ const tabs = {
   _tabsMatchByUrls: (tabList, partialUrls) => {
     // console.warn(partialUrls);
     if (partialUrls.length === 0) return [];
-    const re = new RegExp(`.*${partialUrls.join('|')}`, 'ig');
+    const re = new RegExp(`.*${partialUrls.join('|')}`, 'i');
     const devTabs = tabList.filter((tab) => {
       const url = tab?.url;
       if (url) return re.test(url);

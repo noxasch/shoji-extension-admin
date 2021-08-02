@@ -57,7 +57,7 @@ class ViewReloadButton {
   static async onClickReloadButton(event) {
     if (!ViewReloadButton.reloading) {
       ViewReloadButton.spin();
-      const extensions = await management.getAll();
+      const extensions = await management.getAllExt();
       const devExtIds = management.getActiveDevIds(extensions);
       await management.reloadAllDev(extensions);
       await tabs.reloadAllByUrlMatch(devExtIds);

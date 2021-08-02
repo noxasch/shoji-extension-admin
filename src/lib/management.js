@@ -17,7 +17,20 @@ const management = {
   }),
 
   /**
-   * Get all extensions and app installed
+   * Get all extensions only
+   * @returns {Promise<chrome.management.ExtensionInfo[]>} extensions
+   */
+  getAllExt: async () => new Promise((resolve, reject) => {
+    chrome.management.getAll((result) => {
+      if (chrome.runtime.lastError) {
+        return reject(chrome.runtime.lastError.message);
+      }
+      return resolve(result.filter((item) => item.type === 'extension'));
+    });
+  }),
+
+  /**
+   * Get extension by Id
    * @param {*} extensionId 
    * @returns {Promise<chrome.management.ExtensionInfo>}
    */
