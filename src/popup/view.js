@@ -39,7 +39,9 @@ ${extensionCount}</span> extensions.\
    */
   static searchSummaryInfo(foundCount, totalCount, searchQuery) {
     if (foundCount > 0) {
-      return `Found ${foundCount} out of ${totalCount} extensions.`.replace(/\s+/g, ' ');
+      return `Found <span class="bold">${foundCount}</span> out of\
+     ${totalCount} extensions matching\
+     <span class="bold">${searchQuery}</span>`.replace(/\s+/g, ' ');
     }
     return `No result found for <span class="bold">${searchQuery}</span>`;
   }
@@ -56,11 +58,19 @@ ${extensionCount}</span> extensions.\
     }, 0);
   }
 
+  static async init() {
+    const extensions = await management.getAllExt();
+    const devExtensions = management.filterDevExtension(extensions);
+    View.resetList(extensions, devExtensions);
+    View.registerSwitchEvent();
+  }
+
   /**
+   * 
    * @param {chrome.management.ExtensionInfo[]} extensions
    * @param {chrome.management.ExtensionInfo[]} devExtensions
    */
-  static async init(extensions, devExtensions) {
+  static resetList(extensions, devExtensions) {
     const activeCount = View.getActiveExtensionCount(extensions);
     View.renderInfo(View.mainSummaryInfo.bind(
       null,
@@ -69,7 +79,6 @@ ${extensionCount}</span> extensions.\
       devExtensions.length,
     ));
     View.renderList(extensions);
-    View.registerSwitchEvent();
   }
 
   /**

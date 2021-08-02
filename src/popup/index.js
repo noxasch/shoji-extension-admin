@@ -4,9 +4,7 @@ import View from './view';
 import ViewReloadButton from './viewReloadButton';
 
 async function main() {
-  const extensions = await management.getAllExt();
-  const devExtensions = management.filterDevExtension(extensions);
-  View.init(extensions, devExtensions);
+  View.init();
   ViewReloadButton.init();
 }
 

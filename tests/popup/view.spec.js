@@ -144,13 +144,17 @@ describe('Basic UI Test', () => {
     expect(res).toBe(expected);
   });
 
-  test('init should call three function', () => {
-    jest.spyOn(View, 'renderInfo');
+  test('init should call four function', async () => {
+    // jest.spyOn(View, 'renderInfo');
     jest.spyOn(View, 'renderList');
     jest.spyOn(View, 'registerSwitchEvent');
+    jest.spyOn(management, 'getAllExt');
+    jest.spyOn(management, 'filterDevExtension');
+    management.getAllExt.mockImplementation(() => Promise.resolve(extensions));
     document.body.innerHTML = popupHtml;
-    View.init(extensions, extensions);
-    expect(View.renderInfo).toBeCalled();
+    await View.init(extensions, extensions);
+    expect(management.getAllExt).toBeCalled();
+    expect(management.filterDevExtension).toBeCalled();
     expect(View.renderList).toBeCalled();
     expect(View.registerSwitchEvent).toBeCalled();
   });
