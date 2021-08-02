@@ -11,10 +11,11 @@
     "persistent": false
   },
   "permissions": [
-    "storage",
+    "tabs",
     "chrome://favicon/",
     "management",
-    "notifications"
+    "notifications",
+    "storage"
   ],
   "commands": {
     "Alt+R": {
