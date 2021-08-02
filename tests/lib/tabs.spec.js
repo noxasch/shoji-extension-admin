@@ -68,4 +68,16 @@ describe('tabs API', () => {
     await tabs.reloadAllByUrlMatch(extIds);
     expect(tabs.reload).toBeCalledTimes(1);
   });
+
+  test('reloadAllByUrlMatch should return without calling any function', async () => {
+    jest.spyOn(tabs, 'reload');
+    jest.spyOn(tabs, 'getAll');
+    jest.spyOn(tabs, '_tabsMatchByUrls');
+    tabs.getAll.mockImplementation(() => Promise.resolve(tabList));
+    tabs.reload.mockImplementation(() => null);
+    await tabs.reloadAllByUrlMatch([]);
+    expect(tabs._tabsMatchByUrls).not.toBeCalled();
+    expect(tabs.getAll).not.toBeCalled();
+    expect(tabs.reload).not.toBeCalled();
+  });
 });

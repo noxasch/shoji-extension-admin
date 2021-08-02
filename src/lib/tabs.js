@@ -53,6 +53,7 @@ const tabs = {
    * @param {String[]} partialUrls 
    */
   reloadAllByUrlMatch: async (partialUrls) => {
+    if (partialUrls.length === 0) return;
     const allTabs = await tabs.getAll();
     const devTabs = await tabs._tabsMatchByUrls(allTabs, partialUrls);
     devTabs.forEach(async (tab) => {
