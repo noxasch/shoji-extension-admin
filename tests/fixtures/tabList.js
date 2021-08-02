@@ -16,12 +16,11 @@ const tabList = [
     url: 'https://localhost',
   },
   {
-    index: 0,
+    index: 2,
     id: 1237,
     active: true,
     audible: false,
     title: 'Some title',
-    url: 'https://localhost',
   },
 ];
 
