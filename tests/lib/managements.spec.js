@@ -2,7 +2,7 @@ import management from '../../src/lib/management';
 import extensionsInfo from '../fixtures/extensionsList';
 
 describe('managements test', () => {
-  test('getAll should return list of extensionInfo', () => {
+  test('getAll should return all types', () => {
     chrome.management.getAll.mockImplementation((cb) => cb(extensionsInfo));
     expect(management.getAll()).resolves.toEqual(extensionsInfo);
   });
@@ -21,6 +21,28 @@ describe('managements test', () => {
       delete chrome.runtime.lastError;
     });
     expect(management.getAll()).rejects.toEqual(lastErrorMessage);
+  });
+
+  test('getAllExt should return list of extensions', () => {
+    chrome.management.getAll.mockImplementation((cb) => cb(extensionsInfo));
+    const expected = extensionsInfo.filter((item) => item.type === 'extension');
+    expect(management.getAllExt()).resolves.toEqual(expected);
+  });
+
+  test('getAllExt should return error', () => {
+    const lastErrorMessage = 'this is an error';
+    const lastErrorGetter = jest.fn(() => lastErrorMessage);
+    const lastError = {
+      get message() {
+        return lastErrorGetter();
+      },
+    };
+    chrome.management.getAll.mockImplementation((cb) => {
+      chrome.runtime.lastError = lastError;
+      cb();
+      delete chrome.runtime.lastError;
+    });
+    expect(management.getAllExt()).rejects.toEqual(lastErrorMessage);
   });
 
   test('get should return one extensionInfo', () => {
