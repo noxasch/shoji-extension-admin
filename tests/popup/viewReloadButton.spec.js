@@ -7,6 +7,7 @@ import ViewReloadButton from '../../src/popup/viewReloadButton';
 import popupHtml from '../fixtures/popup';
 import management from '../../src/lib/management';
 import notifications from '../../src/lib/notifications';
+import tabs from '../../src/lib/tabs';
 
 // mock all inside a module
 // jest.mock('../../src/lib/management');
@@ -104,18 +105,24 @@ describe('ViewReloadButton', () => {
     jest.spyOn(ViewReloadButton, 'removeSpin');
     jest.spyOn(management, 'reloadAllDev');
     jest.spyOn(management, 'getAll');
+    jest.spyOn(management, 'getActiveDevIds');
+    jest.spyOn(tabs, 'reloadAllByUrlMatch');
     jest.spyOn(notifications, 'createNotification');
     ViewReloadButton.spin.mockImplementation(() => null);
     ViewReloadButton.removeSpin.mockImplementation(() => null);
     management.reloadAllDev.mockImplementation(() => Promise.resolve());
     management.getAll.mockImplementation(() => Promise.resolve());
+    management.getActiveDevIds.mockImplementation(() => null);
     notifications.createNotification.mockImplementation(() => Promise.resolve());
+    tabs.reloadAllByUrlMatch.mockImplementation(() => null);
 
     await ViewReloadButton.onClickReloadButton({ target: null });
 
     expect(ViewReloadButton.spin).toBeCalled();
     expect(management.getAll).toBeCalled();
+    expect(management.getActiveDevIds).toBeCalled();
     expect(management.reloadAllDev).toBeCalled();
+    expect(tabs.reloadAllByUrlMatch).toBeCalled();
     expect(setTimeout).toBeCalled();
     expect(setTimeout).toHaveBeenCalledTimes(1);
     expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 2000);

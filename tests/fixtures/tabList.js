@@ -5,7 +5,7 @@ const tabList = [
     active: true,
     audible: false,
     title: 'some extension',
-    url: 'chrome-extension://abcdefghijklmn/main.html',
+    url: 'chrome-extension://abcdefghijkl/main.html',
   },
   {
     index: 1,

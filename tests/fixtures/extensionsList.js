@@ -1,6 +1,6 @@
 const extensions = [
   {
-    id: '1',
+    id: 'abcdefghijkl',
     installType: 'development',
     name: 'extension 0',
     enabled: true,

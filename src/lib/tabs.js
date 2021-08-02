@@ -29,6 +29,37 @@ const tabs = {
       return resolve();
     });
   }),
+
+  /**
+   * 
+   * @param {chrome.tabs.Tab[]} tabList
+   * @param {String[]} partialUrls
+   * @return {chrome.tabs.Tab[]} devTabs
+   */
+  _tabsMatchByUrls: (tabList, partialUrls) => {
+    // console.warn(partialUrls);
+    if (partialUrls.length === 0) return [];
+    const re = new RegExp(`.*${partialUrls.join('|')}`, 'ig');
+    const devTabs = tabList.filter((tab) => {
+      const url = tab?.url;
+      if (url) return re.test(url);
+      return false;
+    });
+    return devTabs;
+  },
+
+  /**
+   * 
+   * @param {String[]} partialUrls 
+   */
+  reloadAllByUrlMatch: async (partialUrls) => {
+    const allTabs = await tabs.getAll();
+    const devTabs = await tabs._tabsMatchByUrls(allTabs, partialUrls);
+    devTabs.forEach(async (tab) => {
+      const id = tab?.id;
+      if (id) await tabs.reload(id);
+    });
+  },
 };
 
 export default tabs;

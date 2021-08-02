@@ -1,6 +1,7 @@
 /**
  * @jest-environment puppeteer
  */
+/* eslint-disable arrow-body-style */
 // also count as e2e test since we run with actual chrome API
 require('dotenv').config(); // include extension pem and
 const pti = require('puppeteer-to-istanbul');
@@ -16,6 +17,14 @@ function delay(time) {
   });
 }
 
+// function extract(jsHandle) {
+//   return jsHandle.executionContext().evaluate((obj) => {
+//     // serialize |obj| however you want
+//     // return 'Obj ' + (typeof obj);
+//     return obj;
+//   }, jsHandle);
+// }
+
 describe('', () => {
   // this.timeout = '10000';
   beforeEach(async () => {
@@ -23,6 +32,10 @@ describe('', () => {
 
     await page
       .goto(`chrome-extension://${extensionID}/popup.html`);
+    // page.on('console', async (msg) => {
+    //   const args = await Promise.all(msg.args().map((arg) => extract(arg)));
+    //   console.log(msg.text(), ...args);
+    // });
     // page.on('console', (msg) => {
     //   for (let i = 0; i < msg.args().length; i += 1) {
     //     console.log(`${i}: ${msg.args()[i]}`);

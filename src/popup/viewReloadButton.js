@@ -1,5 +1,6 @@
 import management from '../lib/management';
 import notifications from '../lib/notifications';
+import tabs from '../lib/tabs';
 
 class ViewReloadButton {
   // constructor() {
@@ -57,7 +58,9 @@ class ViewReloadButton {
     if (!ViewReloadButton.reloading) {
       ViewReloadButton.spin();
       const extensions = await management.getAll();
+      const devExtIds = management.getActiveDevIds(extensions);
       await management.reloadAllDev(extensions);
+      await tabs.reloadAllByUrlMatch(devExtIds);
       setTimeout(() => {
         ViewReloadButton.removeSpin();
         notifications.createNotification();

@@ -86,7 +86,7 @@ const management = {
    */
   getActiveDevIds: (extensions) => {
     const enabledDevExtensions = management.filterDevExtension(extensions)
-      .filter((item) => item.enabled);
+      .filter((item) => item.enabled && item.id !== chrome.runtime.id); // exclude self
     return enabledDevExtensions.map((item) => item.id);
   },
 
@@ -95,8 +95,7 @@ const management = {
    * @returns {Promise<Void>}
    */
   reloadAllDev: async (extensions) => {
-    let devIds = management.getActiveDevIds(extensions);
-    devIds = devIds.filter((id) => id !== chrome.runtime.id);
+    const devIds = management.getActiveDevIds(extensions);
     devIds.forEach(async (id) => {
       if (id) await management.reload(id);
     });
