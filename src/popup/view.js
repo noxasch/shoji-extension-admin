@@ -18,6 +18,34 @@ class View {
 
   /**
    * 
+   * @param {!number} extensionCount
+   * @param {!number} activeCount
+   * @param {!number} devCount
+   * @returns {String}
+   */
+  static mainSummaryInfo(extensionCount, activeCount, devCount) {
+    return `You have a total of <span class="bold">\
+${extensionCount}</span> extensions.\
+ <span class="bold">${activeCount}</span> enabled extension.\
+ <span class="bold">${devCount}</span> dev extension.`.replace(/\s+/g, ' ');
+  }
+
+  /**
+   * 
+   * @param {number} foundCount 
+   * @param {number} totalCount 
+   * @param {String} searchQuery
+   * @returns {String}
+   */
+  static searchSummaryInfo(foundCount, totalCount, searchQuery) {
+    if (foundCount > 0) {
+      return `Found ${foundCount} out of ${totalCount} extensions.`.replace(/\s+/g, ' ');
+    }
+    return `No result found for <span class="bold">${searchQuery}</span>`;
+  }
+
+  /**
+   * 
    * @param {chrome.management.ExtensionInfo[]} extensions extensions
    * @returns {number}
    */
@@ -30,28 +58,27 @@ class View {
 
   /**
    * @param {chrome.management.ExtensionInfo[]} extensions
-   * @param {chrome.management.ExtensionInfo[]} devEtensions
+   * @param {chrome.management.ExtensionInfo[]} devExtensions
    */
-  static async init(extensions, devEtensions) {
+  static async init(extensions, devExtensions) {
     const activeCount = View.getActiveExtensionCount(extensions);
-    View.renderInfo(extensions.length, activeCount, devEtensions.length);
+    View.renderInfo(View.mainSummaryInfo.bind(
+      null,
+      extensions.length,
+      activeCount,
+      devExtensions.length,
+    ));
     View.renderList(extensions);
     View.registerSwitchEvent();
   }
 
   /**
-   * 
-   * @param {!number} extensionCount 
-   * @param {!number} activeCount
-   * @param {!number} devCount
+   * @param {Function} InfoStringFn
    */
-  static renderInfo(extensionCount, activeCount, devCount) {
-    const info = document.querySelector(View.infoBarSelector);
-    if (info) {
-      info.innerHTML = `You have a total of <span class="bold">\
-${extensionCount}</span> extensions.\
- <span class="bold">${activeCount}</span> enabled extension.\
- <span class="bold">${devCount}</span> dev extension.`.replace(/\s+/g, ' ');
+  static renderInfo(InfoStringFn) {
+    const infoBar = document.querySelector(View.infoBarSelector);
+    if (infoBar) {
+      infoBar.innerHTML = InfoStringFn();
     } else {
       throw TypeError(`${View.infoBarSelector} is undefined`);
     }
@@ -72,7 +99,7 @@ ${extensionCount}</span> extensions.\
    * @param {boolean} enabled 
    * @param {String} iconSrc
    * @param {String} installType
-   * @returns 
+   * @returns {String}
    */
   static _listItemString(id, name, version, enabled, iconSrc, installType) {
     return /* html */`<li class="list-item p:12 flex" data-id="${id}"\

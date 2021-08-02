@@ -35,19 +35,72 @@ describe('Basic UI Test', () => {
       .toThrow(TypeError(`${View.infoBarSelector} is undefined`));
   });
 
-  test('should output input params on info bar', () => {
+  test('render mainSummaryInfo', () => {
     const params = {
       extensionCount: 10,
       activeCount: 5,
       devCount: 1,
     };
-    const expectedOutput = `You have a total of ${params.extensionCount}\
- extensions. ${params.activeCount} enabled\
- extension. ${params.devCount} dev extension.`;
+    const expectedOutput = View.mainSummaryInfo(
+      params.extensionCount,
+      params.activeCount,
+      params.devCount,
+    );
 
     document.body.innerHTML = popupHtml;
-    View.renderInfo(10, 5, 1);
-    const res = document.querySelector(`${View.infoBarSelector}`).textContent;
+    View.renderInfo(View.mainSummaryInfo.bind(
+      null,
+      params.extensionCount,
+      params.activeCount,
+      params.devCount,
+    ));
+    const res = document.querySelector(`${View.infoBarSelector}`).innerHTML;
+    expect(res).toBe(expectedOutput);
+  });
+
+  test('render searchSummaryInfo', () => {
+    const params = {
+      found: 2,
+      total: 10,
+      devCount: 1,
+    };
+    const expectedOutput = View.searchSummaryInfo(
+      params.found,
+      params.total,
+      params.devCount,
+    );
+
+    document.body.innerHTML = popupHtml;
+    View.renderInfo(View.searchSummaryInfo.bind(
+      null,
+      params.found,
+      params.total,
+      params.devCount,
+    ));
+    const res = document.querySelector(`${View.infoBarSelector}`).innerHTML;
+    expect(res).toBe(expectedOutput);
+  });
+
+  test('render searchSummaryInfo no item found', () => {
+    const params = {
+      found: 0,
+      total: 10,
+      devCount: 1,
+    };
+    const expectedOutput = View.searchSummaryInfo(
+      params.found,
+      params.total,
+      params.devCount,
+    );
+
+    document.body.innerHTML = popupHtml;
+    View.renderInfo(View.searchSummaryInfo.bind(
+      null,
+      params.found,
+      params.total,
+      params.devCount,
+    ));
+    const res = document.querySelector(`${View.infoBarSelector}`).innerHTML;
     expect(res).toBe(expectedOutput);
   });
 
