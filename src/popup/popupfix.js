@@ -3,10 +3,11 @@ function popupFix() {
 
   if (
     // From testing the following conditions seem to indicate that the popup was opened on a secondary monitor
-    window.screenLeft < 0
+    window.chrome
+    && (window.screenLeft < 0
     || window.screenTop < 0
     || window.screenLeft > window.screen.width
-    || window.screenTop > window.screen.height
+    || window.screenTop > window.screen.height)
   ) {
     chrome.runtime.getPlatformInfo((info) => {
       if (info.os === 'mac') {
