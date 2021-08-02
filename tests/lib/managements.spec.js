@@ -115,4 +115,9 @@ describe('managements test', () => {
     expect(management.getAll).not.toBeCalled();
     expect(management.reload).toBeCalledTimes(1);
   });
+
+  test('Should return list of id string', () => {
+    const ids = management.getActiveDevIds(extensionsInfo);
+    expect(ids).toEqual([extensionsInfo[0].id]);
+  });
 });

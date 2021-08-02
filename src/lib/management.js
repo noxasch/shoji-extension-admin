@@ -80,13 +80,22 @@ const management = {
   },
 
   /**
+   * 
+   * @param {chrome.management.ExtensionInfo[]} extensions
+   * @returns {String[]} devIds
+   */
+  getActiveDevIds: (extensions) => {
+    const enabledDevExtensions = management.filterDevExtension(extensions)
+      .filter((item) => item.enabled);
+    return enabledDevExtensions.map((item) => item.id);
+  },
+
+  /**
    * @param {!chrome.management.ExtensionInfo[]} extensions
    * @returns {Promise<Void>}
    */
   reloadAllDev: async (extensions) => {
-    const enabledDevExtensions = management.filterDevExtension(extensions)
-      .filter((item) => item.enabled);
-    let devIds = enabledDevExtensions.map((item) => item.id);
+    let devIds = management.getActiveDevIds(extensions);
     devIds = devIds.filter((id) => id !== chrome.runtime.id);
     devIds.forEach(async (id) => {
       if (id) await management.reload(id);
