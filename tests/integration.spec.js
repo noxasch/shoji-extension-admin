@@ -103,11 +103,11 @@ describe('', () => {
     await expect(page.$('.mdi-reload')).resolves.toBeTruthy();
   }, 20000);
 
-  test('Popup should contain 1 list item', async () => {
+  test('Popup should contain 2 item in the list', async () => {
     const listItem = await page
       .$$('.list-item');
     expect(listItem).toBeTruthy();
-    expect(listItem.length).toBe(1);
+    expect(listItem.length).toBe(2);
     const spinner = await page.$('.mdi-loading.mdi-spin');
     expect(spinner).toBeFalsy();
   }, 10000);
