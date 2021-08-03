@@ -10,7 +10,7 @@
     "test:unit": "jest --coverage --runInBand",
     "test:integration": "NODE_ENV=test gulp && jest --coverage --runInBand -- integration.spec.js && nyc report --reporter=html",
     "test:integrationold": "jest --coverage --runInBand -c jest.integration.config.js && nyc report --reporter=html",
-    "test": "npm run test:unit && npm run test:integration",
+    "test": "NODE_ENV=test gulp && jest --coverage --runInBand && nyc report --reporter=html",
     "test:watch": "jest --coverage --runInBand --watch --testPathIgnorePatterns integration.spec.js"
   },
   "keywords": [],
