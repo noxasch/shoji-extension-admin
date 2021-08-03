@@ -61,7 +61,7 @@ ${extensionCount}</span> extensions.\
   static async init() {
     const extensions = await management.getAllExt();
     const devExtensions = management.filterDevExtension(extensions);
-    View.resetList(extensions, devExtensions);
+    View.resetView(extensions, devExtensions);
     View.registerSwitchEvent();
   }
 
@@ -70,7 +70,7 @@ ${extensionCount}</span> extensions.\
    * @param {chrome.management.ExtensionInfo[]} extensions
    * @param {chrome.management.ExtensionInfo[]} devExtensions
    */
-  static resetList(extensions, devExtensions) {
+  static resetView(extensions, devExtensions) {
     const activeCount = View.getActiveExtensionCount(extensions);
     View.renderInfo(View.mainSummaryInfo.bind(
       null,
@@ -91,6 +91,19 @@ ${extensionCount}</span> extensions.\
     } else {
       throw TypeError(`${View.infoBarSelector} is undefined`);
     }
+  }
+
+  /**
+   * 
+   * @param {chrome.management.ExtensionInfo[]} searchResults
+   * @param {number} totalCount 
+   * @param {String} searchQuery 
+   */
+  static renderSearchResults(searchResults, totalCount, searchQuery) {
+    View.renderInfo(View.searchSummaryInfo.bind(
+      null, searchResults.length, totalCount, searchQuery,
+    ));
+    View.renderList(searchResults);
   }
 
   /**
@@ -160,24 +173,21 @@ width="32px" height="32px" />\
    * @returns {String} iconSrc
    */
   static _getMaxResIcon(extensionInfo) {
-    let iconSrc = '';
     if (extensionInfo.icons !== undefined && extensionInfo.icons.length > 0) {
       const icons = extensionInfo.icons.length > 3
         ? extensionInfo.icons.slice(0, 2) : [...extensionInfo.icons];
       const temp = icons.pop();
       if (temp) {
-        iconSrc = temp.url;
+        return temp.url;
       }
-    } else {
-      iconSrc = View._generateBase64Img(extensionInfo.name);
     }
-    return iconSrc;
+    return View._generateBase64Img(extensionInfo.name);
   }
 
   /**
    * @param {chrome.management.ExtensionInfo[]} extensions
    */
-  static renderList(extensions = []) {
+  static renderList(extensions) {
     const html = extensions.reduce((res, item) => {
       const iconSrc = View._getMaxResIcon(item);
       return res

@@ -26,7 +26,7 @@ describe('Basic UI Test', () => {
     jest.clearAllMocks();
   });
 
-  test('should throw error if instantiate', () => {
+  test('View Should throw error if instantiate', () => {
     expect(() => new View()).toThrow(TypeError);
   });
 
@@ -202,5 +202,14 @@ describe('Basic UI Test', () => {
   test('should return 2', () => {
     const count = View.getActiveExtensionCount(extensions);
     expect(count).toBe(2);
+  });
+
+  test('renderSearchResult', () => {
+    document.body.innerHTML = popupHtml;
+    jest.spyOn(View, 'renderInfo');
+    jest.spyOn(View, 'renderList');
+    View.renderSearchResults([], 10, 'query');
+    expect(View.renderInfo).toBeCalledTimes(1);
+    expect(View.renderList).toBeCalledTimes(1);
   });
 });
