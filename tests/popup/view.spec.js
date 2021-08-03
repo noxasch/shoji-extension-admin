@@ -145,6 +145,12 @@ describe('Basic UI Test', () => {
     expect(res).toBe(expected);
   });
 
+  test('removeReloadButton should remove button', () => {
+    document.body.innerHTML = popupHtml;
+    View.removeReloadButton();
+    expect(document.getElementById(View.reloadBtnId)).toBeFalsy();
+  });
+
   test('init should call four function', async () => {
     // jest.spyOn(View, 'renderInfo');
     jest.spyOn(View, 'renderList');
@@ -153,9 +159,26 @@ describe('Basic UI Test', () => {
     jest.spyOn(management, 'filterDevExtension');
     management.getAllExt.mockImplementation(() => Promise.resolve(extensions));
     document.body.innerHTML = popupHtml;
-    await View.init(extensions, extensions);
+    await View.init();
     expect(management.getAllExt).toBeCalled();
     expect(management.filterDevExtension).toBeCalled();
+    expect(View.renderList).toBeCalled();
+    expect(View.registerSwitchEvent).toBeCalled();
+  });
+
+  test('init should remove reload button', async () => {
+    // jest.spyOn(View, 'renderInfo');
+    jest.spyOn(View, 'renderList');
+    jest.spyOn(View, 'registerSwitchEvent');
+    jest.spyOn(View, 'removeReloadButton');
+    jest.spyOn(management, 'getAllExt');
+    jest.spyOn(management, 'filterDevExtension');
+    management.getAllExt.mockImplementation(() => Promise.resolve([]));
+    document.body.innerHTML = popupHtml;
+    await View.init();
+    expect(management.getAllExt).toBeCalled();
+    expect(management.filterDevExtension).toBeCalled();
+    expect(View.removeReloadButton).toBeCalled();
     expect(View.renderList).toBeCalled();
     expect(View.registerSwitchEvent).toBeCalled();
   });

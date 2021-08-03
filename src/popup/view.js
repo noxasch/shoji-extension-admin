@@ -58,9 +58,17 @@ ${extensionCount}</span> extensions.\
     }, 0);
   }
 
+  static removeReloadButton() {
+    const reloadBtn = document.getElementById(View.reloadBtnId);
+    if (reloadBtn) {
+      reloadBtn.remove();
+    }
+  }
+
   static async init() {
     const extensions = await management.getAllExt();
     const devExtensions = management.filterDevExtension(extensions);
+    if (devExtensions.length === 0) View.removeReloadButton();
     View.resetView(extensions, devExtensions);
     View.registerSwitchEvent();
   }
