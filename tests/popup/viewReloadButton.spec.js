@@ -30,6 +30,7 @@ describe('ViewReloadButton', () => {
     console.error.mockRestore();
     // jest.useRealTimers();
     jest.clearAllTimers(); // avoid infinite loop
+    jest.useRealTimers();
     jest.clearAllMocks();
   });
 

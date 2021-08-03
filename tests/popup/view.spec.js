@@ -23,6 +23,7 @@ describe('Basic UI Test', () => {
     window.requestAnimationFrame.mockRestore();
     console.error.mockRestore();
     jest.clearAllTimers(); // avoid infinite loop
+    jest.useRealTimers();
     jest.clearAllMocks();
   });
 
