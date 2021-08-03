@@ -1,5 +1,6 @@
+import Command from '../lib/command';
 import management from '../lib/management';
-import notifications from '../lib/notifications';
+// import notifications from '../lib/notifications';
 import tabs from '../lib/tabs';
 
 class ViewReloadButton {
@@ -63,7 +64,8 @@ class ViewReloadButton {
       await tabs.reloadAllByUrlMatch(devExtIds);
       setTimeout(() => {
         ViewReloadButton.removeSpin();
-        notifications.createNotification();
+        chrome.runtime.sendMessage({ command: Command.showBadge });
+        // notifications.createNotification();
         // const extName = chrome.runtime.getManifest().name;
         // if (chrome.runtime.lastError) {
         //   const { message } = chrome.runtime.lastError;
