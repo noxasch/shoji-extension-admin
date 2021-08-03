@@ -18,6 +18,7 @@ class ViewSearch {
     const searchBox = document.getElementById(ViewSearch.searchInputId);
     if (searchBox instanceof HTMLInputElement) {
       searchBox.addEventListener('keydown', ViewSearch.keydown);
+      searchBox.addEventListener('keyup', ViewSearch.keyup);
       searchBox.addEventListener('change', ViewSearch.change);
       searchBox.addEventListener('input', ViewSearch.input);
     } else {
@@ -78,6 +79,24 @@ class ViewSearch {
    * The name correspond to the 'change' event
    */
   static change(event) { // only fired when input is commited
+    if (ViewSearch.typingTimer) {
+      clearTimeout(ViewSearch.typingTimer);
+      ViewSearch.typingTimer = null;
+    }
+
+    if (event.target instanceof HTMLInputElement) {
+      const inputText = event.target.value;
+      ViewSearch.typingTimer = setTimeout(() => {
+        ViewSearch.handleSearch(inputText);
+      }, ViewSearch.typeInterval);
+    }
+  }
+
+  /**
+   * @param {Event} event
+   * The name correspond to the 'change' event
+   */
+  static keyup(event) { // only fired when input is commited
     if (ViewSearch.typingTimer) {
       clearTimeout(ViewSearch.typingTimer);
       ViewSearch.typingTimer = null;

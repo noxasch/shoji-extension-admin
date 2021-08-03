@@ -117,6 +117,22 @@ describe('Search', () => {
     expect(ViewSearch.typingTimer).toBeFalsy();
   });
 
+  test('onKeyup', () => {
+    jest.spyOn(ViewSearch, 'handleSearch');
+    ViewSearch.handleSearch.mockImplementation(() => null);
+    document.body.innerHTML = popupHtml;
+    const searchBox = document.getElementById('search');
+    // searchBox.value = 'something';
+    ViewSearch.typingTimer = setTimeout(() => { }, ViewSearch.typeInterval);
+    ViewSearch.keyup({ target: searchBox });
+    expect(clearTimeout).toBeCalled();
+    expect(ViewSearch.typingTimer).toBeTruthy();
+    expect(ViewSearch.handleSearch).not.toBeCalled();
+    jest.runAllTimers();
+    expect(setTimeout).toBeCalled();
+    expect(ViewSearch.handleSearch).toBeCalled();
+  });
+
   test('onChange', () => {
     jest.spyOn(ViewSearch, 'handleSearch');
     ViewSearch.handleSearch.mockImplementation(() => null);

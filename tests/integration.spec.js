@@ -1,6 +1,7 @@
 /**
  * @jest-environment puppeteer
  */
+/* eslint-disable max-len */
 /* eslint-disable arrow-body-style */
 // also count as e2e test since we run with actual chrome API
 require('dotenv').config(); // include extension pem and
@@ -113,13 +114,17 @@ describe('', () => {
   }, 10000);
 
   test('Clicking the button', async () => {
+    const dummyExt = await page.$(`.list-item:not([data-id="${extensionID}"])`);
+    const checkbox = await dummyExt.$('.toggle .toggle-checkbox');
     expect(page.$(`#${ViewReloadButton.default.reloadBtnId}`)).resolves.toBeTruthy();
     expect(page.$('.mdi-reload')).resolves.toBeTruthy();
+    await expect((await checkbox.getProperty('checked')).jsonValue()).resolves.toBeTruthy();
     await page.click(`#${ViewReloadButton.default.reloadBtnId}`);
     await delay(200); // wait 200ms for the animation to start
     expect(page.$('.mdi-loading.mdi-spin')).resolves.toBeTruthy();
     await delay(2000); // wait another 2sec
     expect(page.$('.mdi-loading.mdi-spin')).resolves.toBeFalsy();
+    await expect((await checkbox.getProperty('checked')).jsonValue()).resolves.toBeTruthy();
   });
 
   test('test background page', async () => {
@@ -134,6 +139,40 @@ describe('', () => {
     await page.keyboard.down('Alt');
     await page.keyboard.press('R');
     await page.keyboard.up('Alt');
-    await delay(5000);
-  }, 10000);
+    // await delay(5000);
+  }, 10_000);
+
+  test('toggleSwitch', async () => {
+    const dummyExt = await page.$(`.list-item:not([data-id="${extensionID}"])`);
+    const sw = await dummyExt.$('.toggle');
+    const cbox = await sw.$('.toggle-checkbox');
+    await sw.click();
+    await delay(200);
+    await expect((await cbox.getProperty('checked')).jsonValue()).resolves.toBeFalsy();
+    await sw.click();
+    await delay(200);
+    await expect((await cbox.getProperty('checked')).jsonValue()).resolves.toBeTruthy();
+  }, 10_000);
+
+  test('search', async () => {
+    let listItem = await page.$$('.list-item[data-id]');
+    expect(listItem.length).toBe(2);
+    await page.focus('#search');
+    await page.keyboard.down('S');
+    await page.keyboard.up('S');
+    await page.keyboard.down('H');
+    await page.keyboard.up('H');
+    await delay(600);
+    listItem = await page.$$('.list-item[data-id]');
+    expect(listItem.length).toBe(1);
+    await page.keyboard.down('Backspace');
+    await page.keyboard.up('Backspace');
+    await page.keyboard.down('Backspace');
+    await page.keyboard.up('Backspace');
+    await page.keyboard.down('Backspace');
+    await page.keyboard.up('Backspace');
+    await delay(600);
+    listItem = await page.$$('.list-item[data-id]');
+    expect(listItem.length).toBe(2);
+  }, 10_000);
 });
