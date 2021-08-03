@@ -6,7 +6,7 @@ import userEvent from '@testing-library/user-event';
 import ViewReloadButton from '../../src/popup/viewReloadButton';
 import popupHtml from '../fixtures/popup';
 import management from '../../src/lib/management';
-import notifications from '../../src/lib/notifications';
+// import notifications from '../../src/lib/notifications';
 import tabs from '../../src/lib/tabs';
 
 // mock all inside a module
@@ -34,10 +34,10 @@ describe('ViewReloadButton', () => {
     jest.clearAllMocks();
   });
 
-  test('Should throw an error', () => {
-    document.body.innerHTML = '<div class="s"></div>';
-    expect(() => ViewReloadButton.registerReloadEvent()).toThrow(TypeError);
-  });
+  // test('Should throw an error', () => {
+  //   document.body.innerHTML = '<div class="s"></div>';
+  //   expect(() => ViewReloadButton.registerReloadEvent()).toThrow(TypeError);
+  // });
 
   test('Should register event with no error', () => {
     document.body.innerHTML = popupHtml;
@@ -108,13 +108,15 @@ describe('ViewReloadButton', () => {
     jest.spyOn(management, 'getAllExt');
     jest.spyOn(management, 'getActiveDevIds');
     jest.spyOn(tabs, 'reloadAllByUrlMatch');
-    jest.spyOn(notifications, 'createNotification');
+    jest.spyOn(chrome.runtime, 'sendMessage');
+    chrome.runtime.sendMessage.mockImplementation(() => null);
+    // jest.spyOn(notifications, 'createNotification');
     ViewReloadButton.spin.mockImplementation(() => null);
     ViewReloadButton.removeSpin.mockImplementation(() => null);
     management.reloadAllDev.mockImplementation(() => Promise.resolve());
     management.getAllExt.mockImplementation(() => Promise.resolve());
     management.getActiveDevIds.mockImplementation(() => null);
-    notifications.createNotification.mockImplementation(() => Promise.resolve());
+    // notifications.createNotification.mockImplementation(() => Promise.resolve());
     tabs.reloadAllByUrlMatch.mockImplementation(() => null);
 
     await ViewReloadButton.onClickReloadButton({ target: null });
@@ -129,7 +131,8 @@ describe('ViewReloadButton', () => {
     expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 2000);
     jest.runAllTimers();
     expect(ViewReloadButton.removeSpin).toBeCalled();
-    expect(notifications.createNotification).toBeCalled();
+    expect(chrome.runtime.sendMessage).toBeCalled();
+    // expect(notifications.createNotification).toBeCalled();
   });
 
   test('init Should call registerReloadEvent', () => {

@@ -83,9 +83,10 @@ class ViewReloadButton {
     const reloadBtn = document.getElementById(ViewReloadButton.reloadBtnId);
     if (reloadBtn) {
       reloadBtn.addEventListener('click', ViewReloadButton.onClickReloadButton);
-    } else {
-      throw TypeError('Reload button is undefined');
     }
+    // else {
+    //   throw TypeError('Reload button is undefined');
+    // }
   }
 }
 
