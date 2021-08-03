@@ -227,6 +227,12 @@ width="32px" height="32px" />\
       if (img instanceof HTMLImageElement) {
         img.classList.toggle('grayscale');
       }
+      const extensions = await management.getAllExt();
+      const devExt = management.filterDevExtension(extensions);
+      const activeCount = View.getActiveExtensionCount(extensions);
+      View.renderInfo(View.mainSummaryInfo.bind(
+        null, extensions.length, activeCount, devExt.length,
+      ));
     }
   }
 

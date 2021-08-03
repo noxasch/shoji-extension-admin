@@ -185,7 +185,7 @@ describe('Basic UI Test', () => {
 
   test('Should execute onSwitchChange', () => {
     jest.spyOn(View, 'onSwitchChange');
-    // View.onSwitchChange.mockImplementation(() => null);
+    View.onSwitchChange.mockImplementation(() => null);
     document.body.innerHTML = '<div><input type="checkbox"/><div>';
     View.registerSwitchEvent();
     userEvent.click(document.querySelector(View.switchSelector));
@@ -194,7 +194,11 @@ describe('Basic UI Test', () => {
 
   test('onSwitchChange should called setEnabled', async () => {
     jest.spyOn(management, 'setEnabled');
+    jest.spyOn(management, 'getAllExt');
+    jest.spyOn(View, 'renderInfo');
     management.setEnabled.mockImplementation(() => Promise.resolve());
+    management.getAllExt.mockImplementation(() => Promise.resolve(extensions));
+    View.renderInfo.mockImplementation(() => null);
     const el = document.createElement('input');
     const ev = { target: el };
     await View.onSwitchChange(ev);
@@ -204,7 +208,9 @@ describe('Basic UI Test', () => {
   test('onSwitchChange should toggle grayscale', async () => {
     const extInfo = [...[extensions[2]]];
     jest.spyOn(management, 'setEnabled');
+    jest.spyOn(management, 'getAllExt');
     management.setEnabled.mockImplementation(() => Promise.resolve());
+    management.getAllExt.mockImplementation(() => Promise.resolve(extensions));
     document.body.innerHTML = popupHtml;
     expect(document.querySelector('.grayscale')).toBeFalsy();
     View.renderList(extInfo);
