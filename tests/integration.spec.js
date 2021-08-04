@@ -6,7 +6,8 @@
 // also count as e2e test since we run with actual chrome API
 require('dotenv').config(); // include extension pem and
 const pti = require('puppeteer-to-istanbul');
-const ViewReloadButton = require('../src/popup/viewReloadButton');
+const ViewReloadButton = require('../src/popup/viewReloadButton').default;
+const View = require('../src/popup/view').default;
 
 // require('expect-puppeteer'); // for custom puppeteer setup
 
@@ -90,12 +91,12 @@ describe('', () => {
   test('test popup', async () => {
     await expect(page.title()).resolves.toMatch('Shoji Extension - Popup');
     const inputElement = await page
-      .$$(`#${ViewReloadButton.default.reloadBtnId}`);
+      .$$(`#${ViewReloadButton.reloadBtnId}`);
     expect(inputElement).toBeTruthy();
     expect(inputElement.length).toBe(1);
     await expect(page.$('.mdi-spin')).resolves.toBeFalsy();
     await expect(page.$('.mdi-reload')).resolves.toBeTruthy();
-    await page.click(`#${ViewReloadButton.default.reloadBtnId}`);
+    await page.click(`#${ViewReloadButton.reloadBtnId}`);
     await delay(500);
     await expect(page.$('.mdi-reload')).resolves.toBeFalsy();
     await expect(page.$('.mdi-spin')).resolves.toBeTruthy();
@@ -116,10 +117,10 @@ describe('', () => {
   test('Clicking the button', async () => {
     const dummyExt = await page.$(`.list-item:not([data-id="${extensionID}"])`);
     const checkbox = await dummyExt.$('.toggle .toggle-checkbox');
-    expect(page.$(`#${ViewReloadButton.default.reloadBtnId}`)).resolves.toBeTruthy();
+    expect(page.$(`#${ViewReloadButton.reloadBtnId}`)).resolves.toBeTruthy();
     expect(page.$('.mdi-reload')).resolves.toBeTruthy();
     await expect((await checkbox.getProperty('checked')).jsonValue()).resolves.toBeTruthy();
-    await page.click(`#${ViewReloadButton.default.reloadBtnId}`);
+    await page.click(`#${ViewReloadButton.reloadBtnId}`);
     await delay(200); // wait 200ms for the animation to start
     expect(page.$('.mdi-loading.mdi-spin')).resolves.toBeTruthy();
     await delay(2000); // wait another 2sec
@@ -156,6 +157,8 @@ describe('', () => {
 
   test('search', async () => {
     let listItem = await page.$$('.list-item[data-id]');
+    let expectedHtml = View.mainSummaryInfo(2, 2, 2);
+    expect((await page.$eval(View.infoBarSelector, (el) => el.innerHTML))).toBe(expectedHtml);
     expect(listItem.length).toBe(2);
     await page.focus('#search');
     await page.keyboard.down('S');
@@ -165,6 +168,8 @@ describe('', () => {
     await delay(600);
     listItem = await page.$$('.list-item[data-id]');
     expect(listItem.length).toBe(1);
+    expectedHtml = View.searchSummaryInfo(1, 2, 'SH');
+    expect((await page.$eval(View.infoBarSelector, (el) => el.innerHTML))).toBe(expectedHtml);
     await page.keyboard.down('Backspace');
     await page.keyboard.up('Backspace');
     await page.keyboard.down('Backspace');
@@ -174,5 +179,7 @@ describe('', () => {
     await delay(600);
     listItem = await page.$$('.list-item[data-id]');
     expect(listItem.length).toBe(2);
+    expectedHtml = View.mainSummaryInfo(2, 2, 2);
+    expect((await page.$eval(View.infoBarSelector, (el) => el.innerHTML))).toBe(expectedHtml);
   }, 10_000);
 });
