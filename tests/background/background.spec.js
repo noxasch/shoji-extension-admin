@@ -91,5 +91,11 @@ describe('background unit', () => {
     chrome.commands.onCommand.addListener(spy);
     chrome.commands.onCommand.callListeners('Alt+R');
     expect(spy).toBeCalledWith('Alt+R');
+
+    jest.spyOn(background, 'handleCommand');
+    background.handleCommand.mockImplementation(() => Promise.resolve);
+    background.registerCommand();
+    chrome.commands.onCommand.callListeners('Alt+R');
+    expect(background.handleCommand).toBeCalledTimes(1);
   });
 });
