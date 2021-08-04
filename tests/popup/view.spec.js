@@ -7,6 +7,7 @@ import popupHtml from '../fixtures/popup';
 import extensions from '../fixtures/extensionsList';
 import management from '../../src/lib/management';
 import View from '../../src/popup/view';
+import Command from '../../src/lib/command';
 
 describe('Basic UI Test', () => {
   beforeEach(() => {
@@ -155,8 +156,12 @@ describe('Basic UI Test', () => {
     // jest.spyOn(View, 'renderInfo');
     jest.spyOn(View, 'renderList');
     jest.spyOn(View, 'registerSwitchEvent');
+    jest.spyOn(View, 'renderCommand');
     jest.spyOn(management, 'getAllExt');
     jest.spyOn(management, 'filterDevExtension');
+    jest.spyOn(Command, 'getCommandString');
+    jest.spyOn(Command, 'getAll');
+    Command.getAll.mockImplementation(() => Promise.resolve());
     management.getAllExt.mockImplementation(() => Promise.resolve(extensions));
     document.body.innerHTML = popupHtml;
     await View.init();
@@ -164,6 +169,9 @@ describe('Basic UI Test', () => {
     expect(management.filterDevExtension).toBeCalled();
     expect(View.renderList).toBeCalled();
     expect(View.registerSwitchEvent).toBeCalled();
+    expect(View.renderCommand).toBeCalled();
+    expect(Command.getCommandString).toBeCalled();
+    expect(Command.getAll).toBeCalled();
   });
 
   test('init should remove reload button', async () => {

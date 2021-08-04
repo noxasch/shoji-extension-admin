@@ -1,3 +1,4 @@
+import Command from '../lib/command';
 import management from '../lib/management';
 import utils from '../lib/utilities';
 
@@ -13,6 +14,8 @@ class View {
   static listBodySelector = '.list-view';
 
   static reloadBtnId = 'reload';
+
+  static commandId = 'command';
 
   static switchSelector = 'input[type="checkbox"]';
 
@@ -71,6 +74,7 @@ ${extensionCount}</span> extensions.\
     if (devExtensions.length === 0) View.removeReloadButton();
     View.resetView(extensions, devExtensions);
     View.registerSwitchEvent();
+    View.renderCommand();
   }
 
   /**
@@ -190,6 +194,14 @@ width="32px" height="32px" />\
       }
     }
     return View._generateBase64Img(extensionInfo.name);
+  }
+
+  static async renderCommand() {
+    const cmdString = await Command.getCommandString();
+    const cmdSpan = document.getElementById(View.commandId);
+    if (cmdSpan) {
+      cmdSpan.innerHTML = cmdString;
+    }
   }
 
   /**
