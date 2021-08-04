@@ -1,10 +1,5 @@
 /* eslint-disable max-len */
-import {
-  showBadge,
-  registerListeners,
-  handleShowBadge,
-  handleCommand,
-} from '../../src/background/index';
+import background from '../../src/background/background';
 import command from '../../src/lib/command';
 import management from '../../src/lib/management';
 import tabs from '../../src/lib/tabs';
@@ -22,7 +17,7 @@ describe('background unit', () => {
   test('showBadge', () => {
     chrome.browserAction.setBadgeBackgroundColor.mockImplementation((obj, cb) => null);
     chrome.browserAction.setBadgeText.mockImplementation((obj, cb) => null);
-    showBadge();
+    background.showBadge();
     expect(chrome.browserAction.setBadgeBackgroundColor).toBeCalled();
     expect(chrome.browserAction.setBadgeText).toBeCalled();
     jest.runAllTimers();
@@ -31,7 +26,7 @@ describe('background unit', () => {
   });
 
   test('handleShowBadge should call showBadge', () => {
-    handleShowBadge({ command: command.showBadge });
+    background.handleShowBadge({ command: command.showBadge });
     expect(chrome.browserAction.setBadgeBackgroundColor).toBeCalled();
     expect(chrome.browserAction.setBadgeText).toBeCalled();
     jest.runAllTimers();
@@ -40,7 +35,7 @@ describe('background unit', () => {
   });
 
   test('handleShowBadge should do nothing', () => {
-    handleShowBadge({ command: '' });
+    background.handleShowBadge({ command: '' });
     expect(chrome.browserAction.setBadgeBackgroundColor).not.toBeCalled();
     expect(chrome.browserAction.setBadgeText).not.toBeCalled();
     jest.runAllTimers();
@@ -52,7 +47,7 @@ describe('background unit', () => {
     chrome.browserAction.setBadgeBackgroundColor.mockImplementation((obj, cb) => null);
     chrome.browserAction.setBadgeText.mockImplementation((obj, cb) => null);
 
-    registerListeners();
+    background.registerListeners();
     expect(chrome.runtime.onMessage.hasListeners()).toBe(true);
 
     chrome.runtime.onMessage.callListeners(
@@ -78,7 +73,7 @@ describe('background unit', () => {
     management.reloadAllDev.mockImplementation(() => Promise.resolve());
     tabs.reloadAllByUrlMatch.mockImplementation(() => Promise.resolve());
 
-    await handleCommand('Alt+R', null);
+    await background.handleCommand('Alt+R', null);
     expect(management.getAllExt).toBeCalledTimes(1);
     expect(management.getActiveDevIds).toBeCalledTimes(1);
     expect(management.reloadAllDev).toBeCalledTimes(1);
