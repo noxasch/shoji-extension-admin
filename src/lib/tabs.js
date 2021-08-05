@@ -21,7 +21,7 @@ const tabs = {
    * @param {String} extensionId 
    * @returns {Promise<chrome.tabs.Tab[]>} tabs
    */
-  getTabbyExtId: async (extensionId) => new Promise((resolve, reject) => {
+  getTabByExtId: async (extensionId) => new Promise((resolve, reject) => {
     chrome.tabs.query({ url: `chrome://extensions/?id=${extensionId}` }, (result) => {
       if (chrome.runtime.lastError) {
         return reject(chrome.runtime.lastError.message);

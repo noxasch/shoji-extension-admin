@@ -155,7 +155,7 @@ describe('Basic UI Test', () => {
   test('init should call four function', async () => {
     // jest.spyOn(View, 'renderInfo');
     jest.spyOn(View, 'renderList');
-    jest.spyOn(View, 'registerSwitchEvent');
+    jest.spyOn(View, 'initSwitchEvent');
     jest.spyOn(View, 'renderCommand');
     jest.spyOn(management, 'getAllExt');
     jest.spyOn(management, 'filterDevExtension');
@@ -168,7 +168,7 @@ describe('Basic UI Test', () => {
     expect(management.getAllExt).toBeCalled();
     expect(management.filterDevExtension).toBeCalled();
     expect(View.renderList).toBeCalled();
-    expect(View.registerSwitchEvent).toBeCalled();
+    expect(View.initSwitchEvent).toBeCalled();
     expect(View.renderCommand).toBeCalled();
     expect(Command.getCommandString).toBeCalled();
     expect(Command.getAll).toBeCalled();
@@ -177,7 +177,7 @@ describe('Basic UI Test', () => {
   test('init should remove reload button', async () => {
     // jest.spyOn(View, 'renderInfo');
     jest.spyOn(View, 'renderList');
-    jest.spyOn(View, 'registerSwitchEvent');
+    jest.spyOn(View, 'initSwitchEvent');
     jest.spyOn(View, 'removeReloadButton');
     jest.spyOn(management, 'getAllExt');
     jest.spyOn(management, 'filterDevExtension');
@@ -188,14 +188,14 @@ describe('Basic UI Test', () => {
     expect(management.filterDevExtension).toBeCalled();
     expect(View.removeReloadButton).toBeCalled();
     expect(View.renderList).toBeCalled();
-    expect(View.registerSwitchEvent).toBeCalled();
+    expect(View.initSwitchEvent).toBeCalled();
   });
 
   test('Should execute onSwitchChange', () => {
     jest.spyOn(View, 'onSwitchChange');
     View.onSwitchChange.mockImplementation(() => null);
     document.body.innerHTML = '<div><input type="checkbox"/><div>';
-    View.registerSwitchEvent();
+    View.initSwitchEvent();
     userEvent.click(document.querySelector(View.switchSelector));
     expect(View.onSwitchChange).toBeCalled();
   });
@@ -249,5 +249,20 @@ describe('Basic UI Test', () => {
     View.renderSearchResults([], 10, 'query');
     expect(View.renderInfo).toBeCalledTimes(1);
     expect(View.renderList).toBeCalledTimes(1);
+  });
+
+  test('renderCommand', async () => {
+    const cmdList = [{
+      name: Command.reloadShortcut,
+      shortcut: '⌥R',
+      description: '',
+    }];
+    document.body.innerHTML = popupHtml;
+    jest.spyOn(Command, 'getCommandString');
+    chrome.commands.getAll.mockImplementation((cb) => cb(cmdList));
+    const cmdString = await Command.getCommandString();
+    View.renderCommand();
+    const cmdSpan = document.getElementById('command');
+    expect(cmdSpan.innerHTML).toBe(cmdString);
   });
 });

@@ -1,4 +1,3 @@
-/* eslint-disable no-empty-pattern */
 import management from '../../src/lib/management';
 import extensionsInfo from '../fixtures/extensionsList';
 
@@ -145,7 +144,7 @@ describe('managements test', () => {
   });
 
   test('removeExtensionById', async () => {
-    chrome.management.uninstall.mockImplementation((extId, {}, cb) => cb());
+    chrome.management.uninstall.mockImplementation((extId, opt, cb) => cb());
     expect(management.removeExtensionById(extensionsInfo)).resolves.not.toThrow();
   });
 
@@ -157,7 +156,7 @@ describe('managements test', () => {
         return lastErrorGetter();
       },
     };
-    chrome.management.uninstall.mockImplementation((extId, { }, cb) => {
+    chrome.management.uninstall.mockImplementation((extId, opt, cb) => {
       chrome.runtime.lastError = lastError;
       cb();
       delete chrome.runtime.lastError;

@@ -1,6 +1,7 @@
 import Command from '../lib/command';
 import management from '../lib/management';
 import utils from '../lib/utilities';
+import ViewDropdown from './viewDropdown';
 
 class View {
   constructor() {
@@ -73,8 +74,9 @@ ${extensionCount}</span> extensions.\
     const devExtensions = management.filterDevExtension(extensions);
     if (devExtensions.length === 0) View.removeReloadButton();
     View.resetView(extensions, devExtensions);
-    View.registerSwitchEvent();
+    View.initSwitchEvent();
     View.renderCommand();
+    View.initRemoveDropdown();
   }
 
   /**
@@ -91,6 +93,7 @@ ${extensionCount}</span> extensions.\
       devExtensions.length,
     ));
     View.renderList(extensions);
+    ViewDropdown.init();
   }
 
   /**
@@ -116,6 +119,7 @@ ${extensionCount}</span> extensions.\
       null, searchResults.length, totalCount, searchQuery,
     ));
     View.renderList(searchResults);
+    ViewDropdown.init();
   }
 
   /**
@@ -155,7 +159,7 @@ width="32px" height="32px" />\
     <div class="toggle-switch"></div>\
   </label>\
   <div class="w:10"></div>\
-  <span class="mdi mdi-dots-vertical fs:24 toggle-dropdown"></span>\
+  <span class="mdi mdi-dots-vertical fs:24 toggle-dropdown" data-id="${id}"></span>\
 </li>`;
   }
 
@@ -248,12 +252,23 @@ width="32px" height="32px" />\
     }
   }
 
-  static registerSwitchEvent() {
+  static initSwitchEvent() {
     const switches = document.querySelectorAll(View.switchSelector);
     if (switches) {
       switches.forEach((sw) => {
         sw.addEventListener('change', View.onSwitchChange);
       });
+    }
+  }
+
+  static initRemoveDropdown() {
+    const header = document.querySelector('.header');
+    if (header) {
+      header.addEventListener('click', ViewDropdown.removeDropdown);
+    }
+    const infoBar = document.querySelector('.info-bar');
+    if (infoBar) {
+      infoBar.addEventListener('click', ViewDropdown.removeDropdown);
     }
   }
 }

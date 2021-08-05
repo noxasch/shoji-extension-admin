@@ -81,12 +81,12 @@ describe('tabs API', () => {
     expect(tabs.reload).not.toBeCalled();
   });
 
-  test('getTabbyExtId', () => {
+  test('getTabByExtId', () => {
     chrome.tabs.query.mockImplementation((queryInfo, cb) => cb());
-    expect(tabs.getTabbyExtId('abcdefghijklmno')).resolves.not.toThrow();
+    expect(tabs.getTabByExtId('abcdefghijklmno')).resolves.not.toThrow();
   });
 
-  test('getTabbyExtId', () => {
+  test('getTabByExtId', () => {
     const lastErrorMessage = 'this is an error';
     const lastErrorGetter = jest.fn(() => lastErrorMessage);
     const lastError = {
@@ -99,7 +99,7 @@ describe('tabs API', () => {
       cb();
       delete chrome.runtime.lastError;
     });
-    expect(tabs.getTabbyExtId('abcdefghijklmno')).rejects.toBe(lastErrorMessage);
+    expect(tabs.getTabByExtId('abcdefghijklmno')).rejects.toBe(lastErrorMessage);
   });
 
   test('activate', () => {
