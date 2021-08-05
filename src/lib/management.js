@@ -58,6 +58,20 @@ const management = {
 
   /**
    * 
+   * @param {String} extensionId 
+   * @returns {Promise<void>}
+   */
+  removeExtensionById: async (extensionId) => new Promise((resolve, reject) => {
+    chrome.management.uninstall(extensionId, {}, () => {
+      if (chrome.runtime.lastError) {
+        return reject(chrome.runtime.lastError.message);
+      }
+      return resolve();
+    });
+  }),
+
+  /**
+   * 
    * @param {String} id 
    * @param {boolean} enabled 
    * @returns {Promise<void>}
