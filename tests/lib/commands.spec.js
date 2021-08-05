@@ -1,4 +1,4 @@
-import Commands from '../../src/lib/command';
+import Command from '../../src/lib/command';
 
 describe('command lib', () => {
   test('getAll', async () => {
@@ -8,7 +8,7 @@ describe('command lib', () => {
       description: '',
     }];
     chrome.commands.getAll.mockImplementation((cb) => cb(cmdList));
-    const res = await Commands.getAll();
+    const res = await Command.getAll();
     expect(chrome.commands.getAll).toBeCalled();
     expect(res).toBe(cmdList);
   });
@@ -26,17 +26,17 @@ describe('command lib', () => {
       cb();
       delete chrome.runtime.lastError;
     });
-    expect(Commands.getAll()).rejects.toEqual(lastErrorMessage);
+    expect(Command.getAll()).rejects.toEqual(lastErrorMessage);
   });
 
   test('getCommandString should return Alt+R', async () => {
     const cmdList = [{
-      name: Commands.reloadShortcut,
+      name: Command.reloadShortcut,
       shortcut: '⌥R',
       description: '',
     }];
     chrome.commands.getAll.mockImplementation((cb) => cb(cmdList));
-    const res = await Commands.getCommandString();
+    const res = await Command.getCommandString();
     expect(res).toBe('<kbd>⌥</kbd>+<kbd>R</kbd>');
   });
 });
