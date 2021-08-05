@@ -66,6 +66,13 @@ describe('', () => {
     //   (target) => target.type() === 'background_page',
     // );
     // const backgroundPage = await backgroundPageTarget.page();
+    // const pages = await browser.pages();
+    // if (pages.length > 1) {
+    //   pages.forEach((p, index) => {
+    //     if (index !== 0) p.close();
+    //   });
+    // }
+    // page = await browser.pages()[0];
 
     const [jsCoverage] = await Promise.all([
       page.coverage.stopJSCoverage(),
@@ -104,6 +111,11 @@ describe('', () => {
     await expect(page.$('.mdi-spin')).resolves.toBeFalsy();
     await expect(page.$('.mdi-reload')).resolves.toBeTruthy();
   }, 20000);
+
+  test('test command output', async () => {
+    await expect(page.$eval('#command', (el) => el.innerHTML))
+      .resolves.toBe('<kbd>⌥</kbd>+<kbd>R</kbd>');
+  });
 
   test('Popup should contain 2 item in the list', async () => {
     const listItem = await page
@@ -182,4 +194,60 @@ describe('', () => {
     expectedHtml = View.mainSummaryInfo(2, 2, 2);
     expect((await page.$eval(View.infoBarSelector, (el) => el.innerHTML))).toBe(expectedHtml);
   }, 10_000);
+
+  test('dropdown exist', async () => {
+    const item = await page.$('.list-item[data-id] .toggle-dropdown');
+    // await page.click(`#${ViewReloadButton.reloadBtnId}`);
+    await item.click();
+    expect((await page.$$('.dropdown.menu')).length).toBe(1);
+    expect((await page.$$('.dropdown-list-item')).length).toBe(3);
+  });
+
+  test('dropdown cancel should close dropdown', async () => {
+    const item = await page.$('.list-item[data-id] .toggle-dropdown');
+    await item.click();
+    // await delay(10_000);
+    await page.click('.dropdown-list-item#cancel');
+    await delay(200);
+    // await delay(10_000);
+    expect(page.$('.dropdown-list-item')).resolves.toBeFalsy();
+  });
+
+  test('dropdown details', async () => {
+    const item = await page.$('.list-item[data-id] .toggle-dropdown');
+    const itemId = await page.$eval('.list-item[data-id]', (el) => el.dataset.id);
+    await item.click();
+    browser.on('targetcreated', (event) => {
+      // console.warn(event);
+      expect(event.url()).toBe(`chrome://extensions/?id=${itemId}`);
+    });
+    await page.click('.dropdown-list-item#details');
+    await delay(200);
+    await item.click();
+    await page.click('.dropdown-list-item#details'); // click again will switch to tab
+    await delay(200);
+    const isVisible = await page.evaluate(() => document.visibilityState);
+    expect(isVisible).toBe('hidden'); // page is now switched
+    await (await browser.pages())[2].close(); // cleanup
+
+    // const pages = await browser.pages();
+    // const visiblePages = pages.filter(async (p) => {
+    //   const state = await p.evaluate(() => document.visibilityState);
+    //   return state === 'visible';
+    // });
+    // console.warn(visiblePages);
+  });
+
+  test('dropdown remove', async () => {
+    const item = await page.$('.list-item[data-id] .toggle-dropdown');
+    await item.click();
+    // page.on('dialog', (dialog) => {
+    //   console.warn(dialog);
+    //   // await dialog.accept();
+    // });
+    await page.click('.dropdown-list-item#remove');
+    // thjis is edge cases for puppeteer
+    // there is no way to get extension dialog
+    // as long as there is no error should be consider accepter
+  });
 });

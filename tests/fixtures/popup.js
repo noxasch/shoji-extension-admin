@@ -20,7 +20,7 @@ const popupHtml = /* html */'<div class="header bb:1 p:12">\
   <div class="footer p:12 fs:12 flex">\
     <span class="left">Shoji Extension Admin v1.5.2</span>\
     <span class="right">Reload keyboard shortcut: \
-    <span><kbd>⌥</kbd>+<kbd>R</kbd></span></span>\
+    <span id="command"><kbd>⌥</kbd>+<kbd>R</kbd></span></span>\
   </div>';
 
 module.exports = popupHtml;
