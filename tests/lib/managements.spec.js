@@ -1,3 +1,4 @@
+/* eslint-disable no-empty-pattern */
 import management from '../../src/lib/management';
 import extensionsInfo from '../fixtures/extensionsList';
 
@@ -138,8 +139,29 @@ describe('managements test', () => {
     expect(management.reload).toBeCalledTimes(1);
   });
 
-  test('Should return list of id string', () => {
+  test('getActiveDevIds Should return list of id string', () => {
     const ids = management.getActiveDevIds(extensionsInfo);
     expect(ids).toEqual([extensionsInfo[0].id]);
+  });
+
+  test('removeExtensionById', async () => {
+    chrome.management.uninstall.mockImplementation((extId, {}, cb) => cb());
+    expect(management.removeExtensionById(extensionsInfo)).resolves.not.toThrow();
+  });
+
+  test('removeExtensionById', async () => {
+    const lastErrorMessage = 'this is an error';
+    const lastErrorGetter = jest.fn(() => lastErrorMessage);
+    const lastError = {
+      get message() {
+        return lastErrorGetter();
+      },
+    };
+    chrome.management.uninstall.mockImplementation((extId, { }, cb) => {
+      chrome.runtime.lastError = lastError;
+      cb();
+      delete chrome.runtime.lastError;
+    });
+    expect(management.removeExtensionById(extensionsInfo)).rejects.toBe(lastErrorMessage);
   });
 });
