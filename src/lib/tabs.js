@@ -18,6 +18,51 @@ const tabs = {
 
   /**
    * 
+   * @param {String} extensionId 
+   * @returns {Promise<chrome.tabs.Tab[]>} tabs
+   */
+  getTabbyExtId: async (extensionId) => new Promise((resolve, reject) => {
+    chrome.tabs.query({ url: `chrome://extensions/?id=${extensionId}` }, (result) => {
+      if (chrome.runtime.lastError) {
+        return reject(chrome.runtime.lastError.message);
+      }
+      return resolve(result);
+    });
+  }),
+
+  /**
+   * 
+   * @param {number} tabId 
+   * @returns {Promise<void>}
+   */
+  activate: async (tabId) => new Promise((resolve, reject) => {
+    chrome.tabs.update(tabId, { active: true }, () => {
+      if (chrome.runtime.lastError) {
+        return reject(chrome.runtime.lastError.message);
+      }
+      return resolve();
+    });
+  }),
+
+  /**
+   * 
+   * @param {String} extensionId 
+   * @returns {Promise<chrome.tabs.Tab>}
+   */
+  createDetailsTab: async (extensionId) => new Promise((resolve, reject) => {
+    chrome.tabs.create({
+      active: false,
+      url: `chrome://extensions/?id=${extensionId}`,
+    }, (tab) => {
+      if (chrome.runtime.lastError) {
+        return reject(chrome.runtime.lastError.message);
+      }
+      return resolve(tab);
+    });
+  }),
+
+  /**
+   * 
    * @param {number} tabId 
    * @returns {Promise<void>}
    */
