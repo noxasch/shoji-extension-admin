@@ -80,4 +80,71 @@ describe('tabs API', () => {
     expect(tabs.getAll).not.toBeCalled();
     expect(tabs.reload).not.toBeCalled();
   });
+
+  test('getTabbyExtId', () => {
+    chrome.tabs.query.mockImplementation((queryInfo, cb) => cb());
+    expect(tabs.getTabbyExtId('abcdefghijklmno')).resolves.not.toThrow();
+  });
+
+  test('getTabbyExtId', () => {
+    const lastErrorMessage = 'this is an error';
+    const lastErrorGetter = jest.fn(() => lastErrorMessage);
+    const lastError = {
+      get message() {
+        return lastErrorGetter();
+      },
+    };
+    chrome.tabs.query.mockImplementation((opts, cb) => {
+      chrome.runtime.lastError = lastError;
+      cb();
+      delete chrome.runtime.lastError;
+    });
+    expect(tabs.getTabbyExtId('abcdefghijklmno')).rejects.toBe(lastErrorMessage);
+  });
+
+  test('activate', () => {
+    chrome.tabs.update.mockImplementation((tabId, propsObj, cb) => cb());
+    expect(tabs.activate()).resolves.not.toThrow();
+  });
+
+  test('activate should throw error', () => {
+    const lastErrorMessage = 'this is an error';
+    const lastErrorGetter = jest.fn(() => lastErrorMessage);
+    const lastError = {
+      get message() {
+        return lastErrorGetter();
+      },
+    };
+    chrome.tabs.update.mockImplementation((tabId, propsObj, cb) => {
+      chrome.runtime.lastError = lastError;
+      cb();
+      delete chrome.runtime.lastError;
+    });
+    expect(tabs.activate()).rejects.toBe(lastErrorMessage);
+  });
+
+  test('createDetailsTab', () => {
+    const tab = {
+      id: 1,
+      url: '',
+    };
+    chrome.tabs.create.mockImplementation((opts, cb) => cb(tab));
+    expect(tabs.createDetailsTab('abcdefghijkl')).resolves.toBe(tab);
+  });
+
+  test('createDetailsTab should reject with error', () => {
+    const lastErrorMessage = 'this is an error';
+    const lastErrorGetter = jest.fn(() => lastErrorMessage);
+    const lastError = {
+      get message() {
+        return lastErrorGetter();
+      },
+    };
+    chrome.tabs.create.mockImplementation((opts, cb) => {
+      chrome.runtime.lastError = lastError;
+      cb();
+      delete chrome.runtime.lastError;
+    });
+    expect(tabs.createDetailsTab()).rejects.toBe(lastErrorMessage);
+  });
 });
