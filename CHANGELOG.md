@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.1](https://github.com/noxasch/shoji-extension-admin/compare/v1.1.0...v1.1.1) (2021-08-06)
+
+
+### Bug Fixes
+
+* autoload search input ([24ea339](https://github.com/noxasch/shoji-extension-admin/commit/24ea3390018e6b1eba338edae878761ca441d2ed))
+* fix non dynamic version ([a95d4d5](https://github.com/noxasch/shoji-extension-admin/commit/a95d4d56d9fe26f23e96228c827b7ccf52797de9))
+
 ## 1.1.0 (2021-08-06)
 
 
