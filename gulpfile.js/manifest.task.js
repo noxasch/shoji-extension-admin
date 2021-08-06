@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 /* eslint-disable no-param-reassign */
 /* eslint-disable func-names */
 const { src, dest } = require('gulp');
@@ -18,6 +19,13 @@ function encodeManifestKey64(fileString, debugKeySting) {
   const res = JSON.parse(fileString);
   const encoded = forge.util.encode64(debugKeySting);
   res.key = encoded;
+  return Buffer.from(JSON.stringify(res, null, '\t'));
+}
+
+function updateVersion(fileString) {
+  const res = JSON.parse(fileString);
+  const { version } = require('../package.json');
+  res.version = version;
   return Buffer.from(JSON.stringify(res, null, '\t'));
 }
 
@@ -52,6 +60,7 @@ function manifestTask() {
       //   );
       // }
       file.contents = includeDebugKey(file.contents);
+      file.contents = updateVersion(file.contents);
       cb(null, file);
     }))
     .pipe(dest('dist/debug'));

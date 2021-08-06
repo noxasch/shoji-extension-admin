@@ -11,6 +11,7 @@ const iconTask = require('./icon.task');
 const manifestTask = require('./manifest.task');
 const htmlTask = require('./html.task');
 const assetTask = require('./assets.task');
+const zipTask = require('./zip.task');
 
 const production = process.env.NODE_ENV === 'production';
 const test = process.env.NODE_ENV === 'test';
@@ -20,25 +21,30 @@ function cleanDebugFolder(cb) {
 }
 
 function watchTask(cb) {
-  if (!production && !test) {
-    // watch(['src/**/*.js'],
-    //   series(
-    //     // cleanDistFolder,
-    //     parallel(jsTask, htmlTask, assetTask),
-    //   ));
-    watch(['src/**/*.js'], series(jsTask));
-    watch(['src/**/*.html'], series(htmlTask));
-    watch(['assets/**/*'], series(assetTask));
-    watch(['assets/manifest.json'], series(manifestTask));
-  }
-  return cb(null); // signal completion
+  watch(['src/**/*.js'], series(jsTask));
+  watch(['src/**/*.html'], series(htmlTask));
+  watch(['assets/**/*'], series(assetTask));
+  watch(['assets/manifest.json'], series(manifestTask));
+  // if (!production && !test) {
+  //   // watch(['src/**/*.js'],
+  //   //   series(
+  //   //     // cleanDistFolder,
+  //   //     parallel(jsTask, htmlTask, assetTask),
+  //   //   ));
+  //   watch(['src/**/*.js'], series(jsTask));
+  //   watch(['src/**/*.html'], series(htmlTask));
+  //   watch(['assets/**/*'], series(assetTask));
+  //   watch(['assets/manifest.json'], series(manifestTask));
+  // }
+  // return cb(null); // signal completion
 }
 
 const seriesTasks = [
   ...(production ? [cleanDebugFolder] : []),
   ...(test ? [cleanDebugFolder] : []),
   parallel(iconTask, htmlTask, manifestTask, assetTask, jsTask),
-  watchTask,
+  ...(production ? [zipTask] : []),
+  ...(!production && !test ? [watchTask] : []),
 ];
 
 // exports.default = series(cleanDistFolder, parallel(),
