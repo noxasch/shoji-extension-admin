@@ -1,9 +1,11 @@
 {
   "name": "shoji_ext_admin",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build:types": "tsc --skipLibCheck  --noEmit false --emitDeclarationOnly true",
+    "type-check": "tsc  --skipLibCheck  --noEmit --allowJS src/**/*.js",
     "build": "NODE_ENV=production gulp",
     "dev": "gulp",
     "release": "standard-version",
@@ -31,7 +33,10 @@
     "@testing-library/user-event": "^13.2.1",
     "@types/chrome": "^0.0.148",
     "@types/jest": "^26.0.24",
+    "ajv": "^8.6.2",
+    "ajv-draft-04": "^1.0.0",
     "canvas": "^2.8.0",
+    "chalk": "^4.1.2",
     "dotenv": "^10.0.0",
     "eslint": "^7.31.0",
     "eslint-config-airbnb-base": "^14.2.1",
