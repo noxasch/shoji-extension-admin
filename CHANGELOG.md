@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.2](https://github.com/noxasch/shoji-extension-admin/compare/v1.1.1...v1.1.2) (2021-08-06)
+
+
+### Bug Fixes
+
+* remove unused permission ([82554da](https://github.com/noxasch/shoji-extension-admin/commit/82554da9772f9a2cf3b1dfcaf2ebf7dccb5d148d))
+
 ### [1.1.1](https://github.com/noxasch/shoji-extension-admin/compare/v1.1.0...v1.1.1) (2021-08-06)
 
 

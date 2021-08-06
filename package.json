@@ -1,6 +1,6 @@
 {
   "name": "shoji_ext_admin",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "type-check": "tsc  --skipLibCheck  --noEmit --allowJS src/**/*.js",
     "build": "NODE_ENV=production gulp",
     "dev": "gulp",
-    "release": "standard-version",
+    "release": "npm run test && standard-version && npm run build",
     "lint": "eslint src/**/*.js tests/**/*.js",
     "test:unit": "jest --coverage --runInBand --testPathIgnorePatterns=\"integration.*\"",
     "test:integration": "NODE_ENV=test gulp && jest --coverage --runInBand -- integration.spec.js && nyc report --reporter=html",
