@@ -154,6 +154,9 @@ describe('Basic UI Test', () => {
 
   test('init should call four function', async () => {
     // jest.spyOn(View, 'renderInfo');
+    const manifest = {
+      version: '1.2',
+    };
     jest.spyOn(View, 'renderList');
     jest.spyOn(View, 'initSwitchEvent');
     jest.spyOn(View, 'renderCommand');
@@ -161,6 +164,7 @@ describe('Basic UI Test', () => {
     jest.spyOn(management, 'filterDevExtension');
     jest.spyOn(Command, 'getCommandString');
     jest.spyOn(Command, 'getAll');
+    chrome.runtime.getManifest.mockImplementation(() => manifest);
     Command.getAll.mockImplementation(() => Promise.resolve());
     management.getAllExt.mockImplementation(() => Promise.resolve(extensions));
     document.body.innerHTML = popupHtml;

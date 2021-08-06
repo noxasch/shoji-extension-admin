@@ -76,7 +76,16 @@ ${extensionCount}</span> extensions.\
     View.resetView(extensions, devExtensions);
     View.initSwitchEvent();
     View.renderCommand();
+    View.renderVersion();
     View.initRemoveDropdown();
+  }
+
+  static renderVersion() {
+    const { version } = chrome.runtime.getManifest();
+    const versionSpan = document.getElementById('version');
+    if (versionSpan) {
+      versionSpan.innerText = `v${version}`;
+    }
   }
 
   /**
