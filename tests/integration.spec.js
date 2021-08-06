@@ -30,6 +30,8 @@ function delay(time) {
 describe('', () => {
   // this.timeout = '10000';
   beforeEach(async () => {
+    // change color theme - best pair with accessibility test
+    // await page.emulateMediaFeatures([{ name: 'prefers-color-scheme', value: 'light' }]);
     await page.coverage.startJSCoverage();
 
     await page
