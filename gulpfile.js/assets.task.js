@@ -9,7 +9,7 @@ function assetTask() {
     'assets/**/*',
     '!assets/**/*.png',
     '!assets/manifest.json', // manifest is handled by the manifestTask()
-    ...(production ? ['!assets/*.pem'] : []), // exclude debug key on production
+    '!assets/*.pem', // exclude debug key from dist
   ], srcOpts)
     .pipe(size({
       showFiles: true,

@@ -20,6 +20,10 @@ function cleanDebugFolder(cb) {
   fs.rmdir('dist/debug', { recursive: true }, cb);
 }
 
+async function waitTask() {
+  return new Promise((resolve) => setTimeout(resolve, 2000));
+}
+
 function watchTask(cb) {
   watch(['src/**/*.js'], series(jsTask));
   watch(['src/**/*.html'], series(htmlTask));
@@ -40,10 +44,9 @@ function watchTask(cb) {
 }
 
 const seriesTasks = [
-  ...(production ? [cleanDebugFolder] : []),
-  ...(test ? [cleanDebugFolder] : []),
+  ...(production || test ? [cleanDebugFolder] : []),
   parallel(iconTask, htmlTask, manifestTask, assetTask, jsTask),
-  ...(production ? [zipTask] : []),
+  ...(production ? [waitTask, zipTask] : []),
   ...(!production && !test ? [watchTask] : []),
 ];
 
@@ -51,4 +54,4 @@ const seriesTasks = [
 //   watchTask);
 // series and parallel accept either each task as params or list
 // but not mixed
-exports.default = series(seriesTasks);
+exports.default = series(...seriesTasks);
