@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.4](https://github.com/noxasch/shoji-extension-admin/compare/v1.1.2...v1.1.4) (2021-08-13)
+
+
+### Bug Fixes
+
+* add wait to wait for rollup before zip ([22e5eb2](https://github.com/noxasch/shoji-extension-admin/commit/22e5eb29f4cb11dd6d12d9a7ec8a2926f76f2f10)), closes [#5](https://github.com/noxasch/shoji-extension-admin/issues/5)
+* remove unused permission ([ce66cef](https://github.com/noxasch/shoji-extension-admin/commit/ce66cef9e918d2c8c9f12918825e8ef19dc6e7bb))
+
 ### [1.1.2](https://github.com/noxasch/shoji-extension-admin/compare/v1.1.1...v1.1.2) (2021-08-06)
 
 
