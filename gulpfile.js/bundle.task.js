@@ -72,7 +72,7 @@ async function rollupTask(fp) {
   await rollupBuild.write({
     file: fp.output,
     format: 'es',
-    sourcemap: true,
+    sourcemap: !production,
   });
   await rollupBuild.close();
 }
