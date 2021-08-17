@@ -2,7 +2,7 @@
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) ![Chrome Web Store](https://img.shields.io/chrome-web-store/users/focfakpjdeliffcmgjihjbfmbbbdhdkf) ![Chrome Web Store](https://img.shields.io/chrome-web-store/rating/focfakpjdeliffcmgjihjbfmbbbdhdkf)
 
-Available on [chrome webstore]()
+Available on [chrome webstore](https://chrome.google.com/webstore/detail/shoji-extension-admin/focfakpjdeliffcmgjihjbfmbbbdhdkf)
 
 What this help you with:
 
