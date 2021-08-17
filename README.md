@@ -1,6 +1,6 @@
 # Shoji Extension Admin
 
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) ![Chrome Web Store](https://img.shields.io/chrome-web-store/users/dasdasdad) ![Chrome Web Store](https://img.shields.io/chrome-web-store/rating/dasdad)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) ![Chrome Web Store](https://img.shields.io/chrome-web-store/users/focfakpjdeliffcmgjihjbfmbbbdhdkf) ![Chrome Web Store](https://img.shields.io/chrome-web-store/rating/focfakpjdeliffcmgjihjbfmbbbdhdkf)
 
 Available on [chrome webstore]()
 
@@ -33,6 +33,14 @@ npm run build
 
 2. Open you extension tab and turn on "developer mode".
 3. "Load unpacked" and select the `dist/debug` folder
+
+## Release
+
+* do not update package.json version manually
+
+```sh
+npm run relase # this will update version
+```
 
 ## License
 
